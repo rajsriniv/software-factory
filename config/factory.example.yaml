@@ -1,0 +1,38 @@
+schema_version: 1
+factory:
+  name: governed-software-factory
+  state_directory: .factory-state
+  max_parallel_tasks: 4
+agents:
+  product: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
+  architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
+  security: {host: copilot, tier: high, model: high-model-id, tools: [read, scan]}
+  planner: {host: copilot, tier: high, model: high-model-id, tools: [read]}
+  java: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
+  python: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
+  react: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
+  quality: {host: copilot, tier: high, model: high-model-id, tools: [read, test, browser]}
+  reviewer: {host: copilot, tier: high, model: high-model-id, tools: [read, test, scan]}
+  release: {host: copilot, tier: high, model: high-model-id, tools: [read, deploy]}
+councils:
+  architecture: [architect, security, reviewer]
+  implementation: [planner, quality, reviewer]
+  release: [security, quality, release]
+profiles:
+  java:
+    build: [./gradlew, build]
+  python:
+    build: [python, -m, pytest]
+  react:
+    build: [npm, run, build]
+  e2e:
+    build: [npx, playwright, test]
+aws:
+  authentication: github-oidc
+  production_environment: production
+  require_human_approval: true
+governance:
+  quorum: absolute-majority
+  fallback: zero-sum-maximin
+  human_escalation_on_tie: true
+  immutable_gates: [security, data-loss, compliance, tests, production-approval]

@@ -1,0 +1,8 @@
+/src/software_factory/governance.py @OWNER
+/src/software_factory/pipeline.py @OWNER
+/config/ @OWNER
+/.github/workflows/ @OWNER
+/blueprints/aws-terraform/ @OWNER
+/SECURITY.md @OWNER
+/GOVERNANCE.md @OWNER
+

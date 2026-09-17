@@ -1,0 +1,16 @@
+name: Bug report
+description: Report a reproducible factory defect
+body:
+  - type: textarea
+    id: problem
+    attributes: {label: Problem, description: Include expected and actual behavior.}
+    validations: {required: true}
+  - type: textarea
+    id: reproduce
+    attributes: {label: Reproduction, description: Include revision, sanitized configuration, event IDs, and evidence.}
+    validations: {required: true}
+  - type: textarea
+    id: impact
+    attributes: {label: Impact and containment}
+    validations: {required: true}
+

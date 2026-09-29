@@ -37,6 +37,8 @@ def load_factory(path: Path) -> dict[str, Any]:
             raise ConfigError(f"Agent {agent_id} needs an explicit model")
         if agent.get("host") not in {"claude", "codex", "copilot"}:
             raise ConfigError(f"Agent {agent_id} needs a supported host")
+    if "company-brain" in agents and agents["company-brain"]["tier"] != "high":
+        raise ConfigError("Company Brain requires a high-tier model")
     for council_id, members in raw.get("councils", {}).items():
         if not isinstance(members, list) or len(members) < 3 or len(members) % 2 == 0:
             raise ConfigError(f"Council {council_id} must have an odd membership of at least three")

@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
+from .brain import CompanyBrain
 from .config import load_factory
 from .governance import decide
 from .ledger import Ledger
@@ -34,7 +35,30 @@ def main() -> None:
     inbox.add_argument("--ledger", type=Path, required=True)
     inbox.add_argument("--recipient", required=True)
     inbox.add_argument("--after", type=int, default=0)
+    ingest = sub.add_parser("brain-ingest")
+    query = sub.add_parser("brain-query")
+    for command in (ingest, query):
+        command.add_argument("--database", type=Path, required=True)
+        command.add_argument("--company", required=True)
+    ingest.add_argument("--source", required=True)
+    ingest.add_argument("--file", type=Path, required=True)
+    ingest.add_argument("--owner", required=True)
+    ingest.add_argument("--expires", required=True)
+    ingest.add_argument("--roles", nargs="+", required=True)
+    query.add_argument("--role", required=True)
+    query.add_argument("--question", required=True)
+    query.add_argument("--max-chars", type=int, default=6000)
     args = parser.parse_args()
+    if args.command == "brain-ingest":
+        digest = CompanyBrain(args.database).ingest(
+            args.company, args.source, args.file.read_text(), args.owner,
+            args.expires, args.roles)
+        print(json.dumps({"sha256": digest}))
+        return
+    if args.command == "brain-query":
+        print(json.dumps(CompanyBrain(args.database).query(
+            args.company, args.role, args.question, args.max_chars), indent=2))
+        return
 
     if args.command == "validate-config":
         config = load_factory(args.config)

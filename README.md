@@ -68,3 +68,14 @@ See [governance](GOVERNANCE.md), [architecture](docs/architecture/software-facto
 
 This is a reference implementation. Local unit tests validate governance, state transitions, configuration, and ledger tamper detection. Real-world reliability requires live agent-host tests, repository protections, AWS integration tests, threat modeling, disaster-recovery exercises, and operating evidence for your environment.
 
+
+### Company Brain
+
+The factory now includes `factory-company-brain`, a high-tier employee context agent
+installed for all three hosts. Its local persistent knowledge store preserves source
+revisions and supplies bounded, cited context packets across sessions. Start with
+[Company Brain onboarding and boundaries](skills/software-factory/references/company-brain.md).
+Import approved company documents once using `brain-ingest`, then retrieve task-specific
+context using `brain-query`. Knowledge is not preloaded; connected services and host
+access controls must be provisioned separately. The role does not bypass council,
+quality, or human approval gates.

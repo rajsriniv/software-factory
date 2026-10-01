@@ -85,7 +85,9 @@ quality, or human approval gates.
 `factory-prompt-refiner` turns intake requests into traceable requirements and
 observable acceptance criteria before architecture. It preserves the original
 request, cites Company Brain context, separates assumptions from facts and asks
-consequential clarification questions. See the
+consequential clarification questions. Every refined brief requires explicit human
+review and approval of its revision and artifact hash before architecture handoff;
+changes require renewed approval. See the
 [prompt refinement workflow](skills/software-factory/references/prompt-refiner.md).
 The existing installer generates this high-tier role for all three clients.
 This is an agent workflow and output contract; the CLI does not automatically

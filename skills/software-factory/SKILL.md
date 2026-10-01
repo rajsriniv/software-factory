@@ -9,9 +9,9 @@ Use this repository's controller, configuration, governance, and blueprints. Tre
 
 Before intake and each stage, consult Company Brain using [company context](references/company-brain.md). Bind its source revisions to the task and refresh before approval.
 
-Run [prompt refinement](references/prompt-refiner.md) at intake and whenever the requirement changes. Pass the confirmed brief to product and architecture; do not treat inferred requirements as approved.
+Run [prompt refinement](references/prompt-refiner.md) at intake and whenever the requirement changes. Present every refined brief for mandatory human review. Wait for explicit approval tied to its revision and saved artifact hash before handing it to product or architecture. Any edit invalidates that approval; present the revised brief again. Do not treat inferred requirements as approved.
 
-Follow intake -> architecture council -> human architecture approval -> planning -> bounded implementation -> independent verification -> human release approval -> AWS release. Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, and React tasks. Verify actual model resolution rather than relying on agent claims.
+Follow intake/refinement -> human refined-brief approval -> architecture council -> human architecture approval -> planning -> bounded implementation -> independent verification -> human release approval -> AWS release. Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, and React tasks. Verify actual model resolution rather than relying on agent claims.
 
 For architecture work, read [TOGAF-aligned architecture](references/architecture.md). For governance and decision rules, read [factory governance](references/governance.md). For stack-specific work, read only the relevant reference: [Java](references/java.md), [Python and PySpark](references/python.md), [React and E2E](references/react-e2e.md), or [AWS](references/aws.md).
 

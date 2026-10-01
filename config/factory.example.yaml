@@ -4,6 +4,7 @@ factory:
   state_directory: .factory-state
   max_parallel_tasks: 4
 agents:
+  prompt-refiner: {host: copilot, tier: high, model: high-model-id, tools: [read, knowledge-query]}
   company-brain: {host: copilot, tier: high, model: high-model-id, tools: [read, knowledge-query]}
   product: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
   architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}

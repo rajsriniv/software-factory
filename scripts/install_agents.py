@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "prompt-refiner": "Refine intake into traceable requirements; read references/prompt-refiner.md. Preserve intent, expose assumptions, ask consequential questions and never invent facts.",
     "company-brain": "Retrieve persistent company context with citations; read references/company-brain.md. Never invent company facts or grant tools.",
     "product": "Turn requests into measurable, traceable requirements.",
     "architect": "Research and design TOGAF-aligned architecture; do not implement.",

@@ -79,3 +79,14 @@ Import approved company documents once using `brain-ingest`, then retrieve task-
 context using `brain-query`. Knowledge is not preloaded; connected services and host
 access controls must be provisioned separately. The role does not bypass council,
 quality, or human approval gates.
+
+### Prompt Refiner
+
+`factory-prompt-refiner` turns intake requests into traceable requirements and
+observable acceptance criteria before architecture. It preserves the original
+request, cites Company Brain context, separates assumptions from facts and asks
+consequential clarification questions. See the
+[prompt refinement workflow](skills/software-factory/references/prompt-refiner.md).
+The existing installer generates this high-tier role for all three clients.
+This is an agent workflow and output contract; the CLI does not automatically
+invoke or validate its output. Existing architecture and release gates still apply.

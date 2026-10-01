@@ -92,3 +92,13 @@ changes require renewed approval. See the
 The existing installer generates this high-tier role for all three clients.
 This is an agent workflow and output contract; the CLI does not automatically
 invoke or validate its output. Existing architecture and release gates still apply.
+
+### TDD and SDET
+
+The factory includes high-tier `factory-tdd-guide` and `factory-sdet` roles.
+Implementation follows red-green-refactor; SDET designs and implements E2E tests
+for all approved requirements, and the quality agent independently verifies them.
+Default release gates include `tdd` and `e2e-coverage`. Read the
+[TDD and SDET workflow](skills/software-factory/references/tdd-sdet.md) for evidence,
+coverage and nonproduction environment requirements. Project-specific E2E tests
+are written when a concrete approved requirement and service are supplied.

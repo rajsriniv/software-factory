@@ -34,7 +34,7 @@ class FactoryState:
     gates: dict[str, GateResult] = field(default_factory=dict)
     history: list[dict[str, str]] = field(default_factory=list)
     required_gates: tuple[str, ...] = (
-        "build", "unit", "integration", "security", "dependencies",
+        "build", "unit", "integration", "tdd", "e2e-coverage", "security", "dependencies",
         "e2e", "iac", "provenance", "rollback",
     )
 

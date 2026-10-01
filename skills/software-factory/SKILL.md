@@ -11,10 +11,12 @@ Before intake and each stage, consult Company Brain using [company context](refe
 
 Run [prompt refinement](references/prompt-refiner.md) at intake and whenever the requirement changes. Present every refined brief for mandatory human review. Wait for explicit approval tied to its revision and saved artifact hash before handing it to product or architecture. Any edit invalidates that approval; present the revised brief again. Do not treat inferred requirements as approved.
 
-Follow intake/refinement -> human refined-brief approval -> architecture council -> human architecture approval -> planning -> bounded implementation -> independent verification -> human release approval -> AWS release. Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, and React tasks. Verify actual model resolution rather than relying on agent claims.
+Follow intake/refinement -> human refined-brief approval -> architecture council -> human architecture approval -> planning and SDET test design -> TDD implementation -> SDET E2E execution -> independent verification -> human release approval -> AWS release. Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, and React tasks. Verify actual model resolution rather than relying on agent claims.
 
 For architecture work, read [TOGAF-aligned architecture](references/architecture.md). For governance and decision rules, read [factory governance](references/governance.md). For stack-specific work, read only the relevant reference: [Java](references/java.md), [Python and PySpark](references/python.md), [React and E2E](references/react-e2e.md), or [AWS](references/aws.md).
 
 Agent councils require independent evidence-backed votes. Objective failures and safety findings cannot be outvoted. Use absolute majority; if none exists, use the controller's predeclared maximin fallback. Escalate ties, missing evidence, destructive changes, security exceptions, architecture revisions, and production deployment to a human.
 
 Never let an implementer approve its own change. Never autonomously deploy or correct production. Report RELEASED only when the controller verifies all required evidence and the exact immutable artifact digest has human approval.
+
+For implementation and E2E work, follow [TDD and SDET](references/tdd-sdet.md). Require red-green-refactor evidence and requirement-to-E2E coverage before release review. Keep SDET test authorship separate from quality verification.

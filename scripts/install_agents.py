@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "security-architect": "Partner with architect to design secure applications; read references/security-architecture.md. Model threats, justify controls and tradeoffs, and preserve independent security review.",
     "code-mapper": "Map repository structure, calls, data flows and change blast radius; read references/platform-specialists.md. Cite files and revisions; do not invent edges.",
     "devops": "Build secure CI/CD and IaC; read references/platform-specialists.md. Deploy only exact human-approved artifacts and plans with rollback evidence.",
     "network": "Design and provision least-exposure networks, NLB and API Gateway; read references/platform-specialists.md. Verify topology and preserve human approvals.",

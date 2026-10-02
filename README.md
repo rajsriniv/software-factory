@@ -113,3 +113,11 @@ The ledger supports `send --channel NAME` and `inbox --channel NAME` for human-r
 agent discussions. See [specialist responsibilities and channels](skills/software-factory/references/platform-specialists.md).
 Infrastructure provisioning requires separately configured credentials, independent
 review and explicit human approval; agents are not installed or invoked automatically.
+
+### Security Architect
+
+`factory-security-architect` partners with the architect on threat models, trust
+boundaries, secure design options and requirement-to-control/test traceability.
+The separate security reviewer independently critiques their design before human
+architecture approval. See [secure architecture workflow](skills/software-factory/references/security-architecture.md).
+The example architecture council now has five members, including Security Architect.

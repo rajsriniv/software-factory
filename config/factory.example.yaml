@@ -4,6 +4,7 @@ factory:
   state_directory: .factory-state
   max_parallel_tasks: 4
 agents:
+  security-architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
   code-mapper: {host: copilot, tier: high, model: high-model-id, tools: [read]}
   devops: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
   network: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
@@ -23,7 +24,7 @@ agents:
   reviewer: {host: copilot, tier: high, model: high-model-id, tools: [read, test, scan]}
   release: {host: copilot, tier: high, model: high-model-id, tools: [read, deploy]}
 councils:
-  architecture: [architect, security, reviewer]
+  architecture: [architect, security-architect, security, quality, reviewer]
   implementation: [planner, quality, reviewer]
   release: [security, quality, release]
 profiles:

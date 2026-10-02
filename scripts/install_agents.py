@@ -9,6 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "ux": "Design evidence-backed user journeys, information architecture and accessible interactions; read references/ux-ui.md. Validate assumptions and obtain human design approval.",
+    "ui": "Design coherent responsive interfaces, components and states; read references/ux-ui.md. Provide implementation-ready specifications and preserve independent review.",
     "security-architect": "Partner with architect to design secure applications; read references/security-architecture.md. Model threats, justify controls and tradeoffs, and preserve independent security review.",
     "code-mapper": "Map repository structure, calls, data flows and change blast radius; read references/platform-specialists.md. Cite files and revisions; do not invent edges.",
     "devops": "Build secure CI/CD and IaC; read references/platform-specialists.md. Deploy only exact human-approved artifacts and plans with rollback evidence.",
@@ -26,7 +28,7 @@ ROLES = {
     "python": "Implement assigned Python or PySpark backend tasks and tests only.",
     "react": "Implement assigned React frontend tasks and component tests only.",
     "quality": "Run independent contract, integration, accessibility, and E2E verification.",
-    "reviewer": "Independently review final artifacts against requirements and evidence.",
+    "reviewer": "Independently review backend and UI code against requirements, approved designs, accessibility, security and evidence; read references/ux-ui.md for frontend review.",
     "release": "Assemble provenance and deploy an explicitly approved immutable artifact.",
 }
 LOW = {"java", "python", "react"}

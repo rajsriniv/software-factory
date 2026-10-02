@@ -121,3 +121,12 @@ boundaries, secure design options and requirement-to-control/test traceability.
 The separate security reviewer independently critiques their design before human
 architecture approval. See [secure architecture workflow](skills/software-factory/references/security-architecture.md).
 The example architecture council now has five members, including Security Architect.
+
+### UX, UI and frontend review
+
+High-tier UX and UI specialists create evidence-backed flows and accessible,
+responsive specifications before frontend implementation. Human design review
+precedes dependent tasks. The existing reviewer explicitly covers React/UI code,
+security, accessibility, rendered behavior and approved-design conformance.
+Design discussions use `factory-design`; see the
+[UX/UI workflow and review criteria](skills/software-factory/references/ux-ui.md).

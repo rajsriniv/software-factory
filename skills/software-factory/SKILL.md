@@ -24,3 +24,5 @@ For implementation and E2E work, follow [TDD and SDET](references/tdd-sdet.md). 
 Use [platform specialists and collaboration channels](references/platform-specialists.md) for code mapping, security review, implementation planning, DevOps, networking and observability. Keep security first: require independent review of IAM, network exposure and deployment blast radius; verify observability before release. Use explicit ledger channels for all specialist handoffs.
 
 During architecture, have the architect and high-tier security architect jointly produce [secure architecture](references/security-architecture.md). Require independent security review and resolution of blocking threats before human architecture approval.
+
+For user-facing products, involve high-tier UX and UI specialists before frontend implementation. Follow [UX, UI and independent frontend review](references/ux-ui.md); obtain human approval of the design, then have reviewer assess UI code and rendered behavior independently.

@@ -4,6 +4,8 @@ factory:
   state_directory: .factory-state
   max_parallel_tasks: 4
 agents:
+  ux: {host: copilot, tier: high, model: high-model-id, tools: [read, research, browser]}
+  ui: {host: copilot, tier: high, model: high-model-id, tools: [read, browser]}
   security-architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
   code-mapper: {host: copilot, tier: high, model: high-model-id, tools: [read]}
   devops: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}

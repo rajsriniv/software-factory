@@ -102,3 +102,14 @@ Default release gates include `tdd` and `e2e-coverage`. Read the
 [TDD and SDET workflow](skills/software-factory/references/tdd-sdet.md) for evidence,
 coverage and nonproduction environment requirements. Project-specific E2E tests
 are written when a concrete approved requirement and service are supplied.
+
+### Platform specialists and channels
+
+The existing security reviewer and implementation planner are extended, with new
+high-tier code mapper, DevOps, network and observability agents. They prioritize
+least privilege, limited blast radius, secure networking and verified telemetry.
+Default release prerequisites include network-security and observability evidence.
+The ledger supports `send --channel NAME` and `inbox --channel NAME` for human-readable
+agent discussions. See [specialist responsibilities and channels](skills/software-factory/references/platform-specialists.md).
+Infrastructure provisioning requires separately configured credentials, independent
+review and explicit human approval; agents are not installed or invoked automatically.

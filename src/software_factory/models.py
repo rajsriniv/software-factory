@@ -33,6 +33,7 @@ class Message:
     kind: str
     payload: dict[str, Any]
     created_at: str
+    channel: str = "factory-general"
 
 
 @dataclass(frozen=True)

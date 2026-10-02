@@ -20,3 +20,5 @@ Agent councils require independent evidence-backed votes. Objective failures and
 Never let an implementer approve its own change. Never autonomously deploy or correct production. Report RELEASED only when the controller verifies all required evidence and the exact immutable artifact digest has human approval.
 
 For implementation and E2E work, follow [TDD and SDET](references/tdd-sdet.md). Require red-green-refactor evidence and requirement-to-E2E coverage before release review. Keep SDET test authorship separate from quality verification.
+
+Use [platform specialists and collaboration channels](references/platform-specialists.md) for code mapping, security review, implementation planning, DevOps, networking and observability. Keep security first: require independent review of IAM, network exposure and deployment blast radius; verify observability before release. Use explicit ledger channels for all specialist handoffs.

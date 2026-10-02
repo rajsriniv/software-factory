@@ -4,6 +4,10 @@ factory:
   state_directory: .factory-state
   max_parallel_tasks: 4
 agents:
+  code-mapper: {host: copilot, tier: high, model: high-model-id, tools: [read]}
+  devops: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
+  network: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
+  observability: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test]}
   tdd-guide: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test]}
   sdet: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, browser]}
   prompt-refiner: {host: copilot, tier: high, model: high-model-id, tools: [read, knowledge-query]}

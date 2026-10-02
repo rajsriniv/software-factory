@@ -26,6 +26,7 @@ def main() -> None:
     vote.add_argument("--ledger", type=Path, required=True)
     send = sub.add_parser("send")
     send.add_argument("--ledger", type=Path, required=True)
+    send.add_argument("--channel", default="factory-general")
     send.add_argument("--sender", required=True)
     send.add_argument("--recipient", required=True)
     send.add_argument("--kind", required=True)
@@ -34,6 +35,7 @@ def main() -> None:
     inbox = sub.add_parser("inbox")
     inbox.add_argument("--ledger", type=Path, required=True)
     inbox.add_argument("--recipient", required=True)
+    inbox.add_argument("--channel")
     inbox.add_argument("--after", type=int, default=0)
     ingest = sub.add_parser("brain-ingest")
     query = sub.add_parser("brain-query")
@@ -74,13 +76,13 @@ def main() -> None:
             parser.error("--payload must be a JSON object")
         message = Message(
             uuid4().hex, args.correlation, args.sender, args.recipient,
-            args.kind, payload, datetime.now(UTC).isoformat(),
+            args.kind, payload, datetime.now(UTC).isoformat(), args.channel,
         )
         event_hash = Ledger(args.ledger).message(message)
         print(json.dumps({"message_id": message.message_id, "event_hash": event_hash}))
         return
     if args.command == "inbox":
-        print(json.dumps(Ledger(args.ledger).inbox(args.recipient, args.after), indent=2))
+        print(json.dumps(Ledger(args.ledger).inbox(args.recipient, args.after, args.channel), indent=2))
         return
     raw = json.loads(args.decision.read_text())
     decision = Decision(

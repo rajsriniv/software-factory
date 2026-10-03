@@ -10,6 +10,7 @@ from uuid import uuid4
 from .brain import CompanyBrain
 from .config import load_factory
 from .governance import decide
+from .improvement import ImprovementStore
 from .ledger import Ledger
 from .models import Decision, Message, Option, Vote
 
@@ -50,7 +51,36 @@ def main() -> None:
     query.add_argument("--role", required=True)
     query.add_argument("--question", required=True)
     query.add_argument("--max-chars", type=int, default=6000)
+    improvement = sub.add_parser("improvement")
+    improvement.add_argument("action", choices=("propose", "evaluate", "compare", "rank", "select", "inspect", "assessment"))
+    improvement.add_argument("--database", type=Path, required=True)
+    improvement.add_argument("--input", type=Path, help="JSON operation payload")
+    improvement.add_argument("--candidate")
     args = parser.parse_args()
+    if args.command == "improvement":
+        store = ImprovementStore(args.database)
+        data = json.loads(args.input.read_text()) if args.input else {}
+        if args.action == "propose":
+            print(json.dumps({"candidate": store.propose(data)}))
+        elif args.action == "compare":
+            store.compare(**data)
+            print(json.dumps({"recorded": True}))
+        else:
+            if not args.candidate:
+                parser.error("--candidate is required for this operation")
+            if args.action == "assessment":
+                print(json.dumps({"assessment_sha256": store.assessment_hash(args.candidate)}))
+            elif args.action == "rank":
+                print(json.dumps(store.rank(args.candidate), indent=2))
+            elif args.action == "inspect":
+                print(json.dumps(store.candidate(args.candidate), indent=2))
+            elif args.action == "evaluate":
+                store.evaluate(args.candidate, data)
+                print(json.dumps({"recorded": True}))
+            else:
+                store.select(args.candidate, data)
+                print(json.dumps({"selected": True, "live_agents_changed": False}))
+        return
     if args.command == "brain-ingest":
         digest = CompanyBrain(args.database).ingest(
             args.company, args.source, args.file.read_text(), args.owner,

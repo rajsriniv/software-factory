@@ -130,3 +130,15 @@ precedes dependent tasks. The existing reviewer explicitly covers React/UI code,
 security, accessibility, rendered behavior and approved-design conformance.
 Design discussions use `factory-design`; see the
 [UX/UI workflow and review criteria](skills/software-factory/references/ux-ui.md).
+
+### Prompt and workflow improvement
+
+An optional SIFT-inspired loop archives inert prompt/workflow overlays, records
+actual evaluation evidence, ranks smoke-tested candidates with pairwise judging,
+and requires benchmark improvement, independent review and exact human approval
+before recording a selection. It never modifies live agents or factory policy.
+Use `software-factory improvement --help` and the
+[improvement workflow](skills/software-factory/references/improvement.md).
+Two new high-tier agents propose and judge improvements. Execution, spend limits,
+model verification and human authentication remain responsibilities of the host
+and evaluation harness; automatic experimentation/adoption is not implemented.

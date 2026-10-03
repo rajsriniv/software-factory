@@ -9,6 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "improvement-proposer": "Propose isolated prompt/workflow overlays from observed failures; read references/improvement.md. Never change policies, code, credentials or live agents.",
+    "evaluation-judge": "Independently compare eligible prompt/workflow candidates; read references/improvement.md. Rank evaluation priority only, never approve adoption.",
     "ux": "Design evidence-backed user journeys, information architecture and accessible interactions; read references/ux-ui.md. Validate assumptions and obtain human design approval.",
     "ui": "Design coherent responsive interfaces, components and states; read references/ux-ui.md. Provide implementation-ready specifications and preserve independent review.",
     "security-architect": "Partner with architect to design secure applications; read references/security-architecture.md. Model threats, justify controls and tradeoffs, and preserve independent security review.",

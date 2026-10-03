@@ -26,3 +26,5 @@ Use [platform specialists and collaboration channels](references/platform-specia
 During architecture, have the architect and high-tier security architect jointly produce [secure architecture](references/security-architecture.md). Require independent security review and resolution of blocking threats before human architecture approval.
 
 For user-facing products, involve high-tier UX and UI specialists before frontend implementation. Follow [UX, UI and independent frontend review](references/ux-ui.md); obtain human approval of the design, then have reviewer assess UI code and rendered behavior independently.
+
+For explicitly requested prompt/workflow optimization, follow the isolated [improvement loop](references/improvement.md). Never apply candidates to live agents automatically; judge rankings guide evaluation effort and cannot replace mandatory verification or human approval.

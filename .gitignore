@@ -55,3 +55,7 @@ crash.*.log
 *.swo
 .DS_Store
 Thumbs.db
+reports/
+.factory-state/
+*.tfstate*
+tfplan*

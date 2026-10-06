@@ -64,10 +64,10 @@ class Ledger:
 
     def message(self, message: Message) -> str:
         return self.append(message.message_id, "message", message.correlation_id, {
-            "sender": message.sender, "recipient": message.recipient, "kind": message.kind, "payload": message.payload
+            "channel": message.channel, "sender": message.sender, "recipient": message.recipient, "kind": message.kind, "payload": message.payload
         }, message.created_at)
 
-    def inbox(self, recipient: str, after_sequence: int = 0) -> list[dict[str, object]]:
+    def inbox(self, recipient: str, after_sequence: int = 0, channel: str | None = None) -> list[dict[str, object]]:
         with self._db() as db:
             rows = db.execute(
                 "SELECT sequence,event_id,correlation_id,payload,created_at FROM events "
@@ -77,7 +77,8 @@ class Ledger:
         messages: list[dict[str, object]] = []
         for sequence, event_id, correlation_id, payload, created_at in rows:
             decoded = json.loads(payload)
-            if decoded["recipient"] in {recipient, "*"}:
+            decoded.setdefault("channel", "factory-general")
+            if decoded["recipient"] in {recipient, "*"} and (channel is None or decoded["channel"] == channel):
                 messages.append({
                     "sequence": sequence, "message_id": event_id,
                     "correlation_id": correlation_id, "created_at": created_at, **decoded,

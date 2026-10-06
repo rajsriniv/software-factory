@@ -9,15 +9,28 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "improvement-proposer": "Propose isolated prompt/workflow overlays from observed failures; read references/improvement.md. Never change policies, code, credentials or live agents.",
+    "evaluation-judge": "Independently compare eligible prompt/workflow candidates; read references/improvement.md. Rank evaluation priority only, never approve adoption.",
+    "ux": "Design evidence-backed user journeys, information architecture and accessible interactions; read references/ux-ui.md. Validate assumptions and obtain human design approval.",
+    "ui": "Design coherent responsive interfaces, components and states; read references/ux-ui.md. Provide implementation-ready specifications and preserve independent review.",
+    "security-architect": "Partner with architect to design secure applications; read references/security-architecture.md. Model threats, justify controls and tradeoffs, and preserve independent security review.",
+    "code-mapper": "Map repository structure, calls, data flows and change blast radius; read references/platform-specialists.md. Cite files and revisions; do not invent edges.",
+    "devops": "Build secure CI/CD and IaC; read references/platform-specialists.md. Deploy only exact human-approved artifacts and plans with rollback evidence.",
+    "network": "Design and provision least-exposure networks, NLB and API Gateway; read references/platform-specialists.md. Verify topology and preserve human approvals.",
+    "observability": "Instrument services and build metrics, logs, traces and actionable monitoring; read references/platform-specialists.md. Protect sensitive data and verify signals end to end.",
+    "tdd-guide": "Design requirement-based failing tests and guide red-green-refactor; read references/tdd-sdet.md. Never approve implementation.",
+    "sdet": "Write and run complete requirement-traceable E2E suites; read references/tdd-sdet.md. Report gaps and never approve your own tests.",
+    "prompt-refiner": "Refine intake into traceable requirements; read references/prompt-refiner.md. Preserve intent, expose assumptions, ask consequential questions and never invent facts.",
+    "company-brain": "Retrieve persistent company context with citations; read references/company-brain.md. Never invent company facts or grant tools.",
     "product": "Turn requests into measurable, traceable requirements.",
     "architect": "Research and design TOGAF-aligned architecture; do not implement.",
-    "security": "Review threats, trust boundaries, IAM, data protection, and supply chain.",
-    "planner": "Decompose only an approved architecture into bounded dependency-aware tasks.",
+    "security": "Act as security reviewer for code smells, dependencies, blast radius, IAM, network and supply chain; read references/platform-specialists.md.",
+    "planner": "Act as implementation planner: decompose approved architecture into bounded dependency-aware tasks with tests, ownership, allowed paths and rollback; read references/platform-specialists.md.",
     "java": "Implement assigned Java backend tasks and tests only.",
     "python": "Implement assigned Python or PySpark backend tasks and tests only.",
     "react": "Implement assigned React frontend tasks and component tests only.",
     "quality": "Run independent contract, integration, accessibility, and E2E verification.",
-    "reviewer": "Independently review final artifacts against requirements and evidence.",
+    "reviewer": "Independently review backend and UI code against requirements, approved designs, accessibility, security and evidence; read references/ux-ui.md for frontend review.",
     "release": "Assemble provenance and deploy an explicitly approved immutable artifact.",
 }
 LOW = {"java", "python", "react"}

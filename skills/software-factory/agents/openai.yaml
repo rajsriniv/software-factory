@@ -1,0 +1,4 @@
+interface:
+  display_name: "Governed Software Factory"
+  short_description: "Multi-agent SDLC with evidence and human gates"
+  default_prompt: "Use $software-factory to turn this requirement into approved architecture, bounded implementation, independent verification, and an AWS release proposal."

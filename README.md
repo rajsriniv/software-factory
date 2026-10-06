@@ -68,3 +68,77 @@ See [governance](GOVERNANCE.md), [architecture](docs/architecture/software-facto
 
 This is a reference implementation. Local unit tests validate governance, state transitions, configuration, and ledger tamper detection. Real-world reliability requires live agent-host tests, repository protections, AWS integration tests, threat modeling, disaster-recovery exercises, and operating evidence for your environment.
 
+
+### Company Brain
+
+The factory now includes `factory-company-brain`, a high-tier employee context agent
+installed for all three hosts. Its local persistent knowledge store preserves source
+revisions and supplies bounded, cited context packets across sessions. Start with
+[Company Brain onboarding and boundaries](skills/software-factory/references/company-brain.md).
+Import approved company documents once using `brain-ingest`, then retrieve task-specific
+context using `brain-query`. Knowledge is not preloaded; connected services and host
+access controls must be provisioned separately. The role does not bypass council,
+quality, or human approval gates.
+
+### Prompt Refiner
+
+`factory-prompt-refiner` turns intake requests into traceable requirements and
+observable acceptance criteria before architecture. It preserves the original
+request, cites Company Brain context, separates assumptions from facts and asks
+consequential clarification questions. Every refined brief requires explicit human
+review and approval of its revision and artifact hash before architecture handoff;
+changes require renewed approval. See the
+[prompt refinement workflow](skills/software-factory/references/prompt-refiner.md).
+The existing installer generates this high-tier role for all three clients.
+This is an agent workflow and output contract; the CLI does not automatically
+invoke or validate its output. Existing architecture and release gates still apply.
+
+### TDD and SDET
+
+The factory includes high-tier `factory-tdd-guide` and `factory-sdet` roles.
+Implementation follows red-green-refactor; SDET designs and implements E2E tests
+for all approved requirements, and the quality agent independently verifies them.
+Default release gates include `tdd` and `e2e-coverage`. Read the
+[TDD and SDET workflow](skills/software-factory/references/tdd-sdet.md) for evidence,
+coverage and nonproduction environment requirements. Project-specific E2E tests
+are written when a concrete approved requirement and service are supplied.
+
+### Platform specialists and channels
+
+The existing security reviewer and implementation planner are extended, with new
+high-tier code mapper, DevOps, network and observability agents. They prioritize
+least privilege, limited blast radius, secure networking and verified telemetry.
+Default release prerequisites include network-security and observability evidence.
+The ledger supports `send --channel NAME` and `inbox --channel NAME` for human-readable
+agent discussions. See [specialist responsibilities and channels](skills/software-factory/references/platform-specialists.md).
+Infrastructure provisioning requires separately configured credentials, independent
+review and explicit human approval; agents are not installed or invoked automatically.
+
+### Security Architect
+
+`factory-security-architect` partners with the architect on threat models, trust
+boundaries, secure design options and requirement-to-control/test traceability.
+The separate security reviewer independently critiques their design before human
+architecture approval. See [secure architecture workflow](skills/software-factory/references/security-architecture.md).
+The example architecture council now has five members, including Security Architect.
+
+### UX, UI and frontend review
+
+High-tier UX and UI specialists create evidence-backed flows and accessible,
+responsive specifications before frontend implementation. Human design review
+precedes dependent tasks. The existing reviewer explicitly covers React/UI code,
+security, accessibility, rendered behavior and approved-design conformance.
+Design discussions use `factory-design`; see the
+[UX/UI workflow and review criteria](skills/software-factory/references/ux-ui.md).
+
+### Prompt and workflow improvement
+
+An optional SIFT-inspired loop archives inert prompt/workflow overlays, records
+actual evaluation evidence, ranks smoke-tested candidates with pairwise judging,
+and requires benchmark improvement, independent review and exact human approval
+before recording a selection. It never modifies live agents or factory policy.
+Use `software-factory improvement --help` and the
+[improvement workflow](skills/software-factory/references/improvement.md).
+Two new high-tier agents propose and judge improvements. Execution, spend limits,
+model verification and human authentication remain responsibilities of the host
+and evaluation harness; automatic experimentation/adoption is not implemented.

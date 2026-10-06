@@ -7,8 +7,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
+from .brain import CompanyBrain
 from .config import load_factory
 from .governance import decide
+from .improvement import ImprovementStore
 from .ledger import Ledger
 from .models import Decision, Message, Option, Vote
 
@@ -25,6 +27,7 @@ def main() -> None:
     vote.add_argument("--ledger", type=Path, required=True)
     send = sub.add_parser("send")
     send.add_argument("--ledger", type=Path, required=True)
+    send.add_argument("--channel", default="factory-general")
     send.add_argument("--sender", required=True)
     send.add_argument("--recipient", required=True)
     send.add_argument("--kind", required=True)
@@ -33,8 +36,61 @@ def main() -> None:
     inbox = sub.add_parser("inbox")
     inbox.add_argument("--ledger", type=Path, required=True)
     inbox.add_argument("--recipient", required=True)
+    inbox.add_argument("--channel")
     inbox.add_argument("--after", type=int, default=0)
+    ingest = sub.add_parser("brain-ingest")
+    query = sub.add_parser("brain-query")
+    for command in (ingest, query):
+        command.add_argument("--database", type=Path, required=True)
+        command.add_argument("--company", required=True)
+    ingest.add_argument("--source", required=True)
+    ingest.add_argument("--file", type=Path, required=True)
+    ingest.add_argument("--owner", required=True)
+    ingest.add_argument("--expires", required=True)
+    ingest.add_argument("--roles", nargs="+", required=True)
+    query.add_argument("--role", required=True)
+    query.add_argument("--question", required=True)
+    query.add_argument("--max-chars", type=int, default=6000)
+    improvement = sub.add_parser("improvement")
+    improvement.add_argument("action", choices=("propose", "evaluate", "compare", "rank", "select", "inspect", "assessment"))
+    improvement.add_argument("--database", type=Path, required=True)
+    improvement.add_argument("--input", type=Path, help="JSON operation payload")
+    improvement.add_argument("--candidate")
     args = parser.parse_args()
+    if args.command == "improvement":
+        store = ImprovementStore(args.database)
+        data = json.loads(args.input.read_text()) if args.input else {}
+        if args.action == "propose":
+            print(json.dumps({"candidate": store.propose(data)}))
+        elif args.action == "compare":
+            store.compare(**data)
+            print(json.dumps({"recorded": True}))
+        else:
+            if not args.candidate:
+                parser.error("--candidate is required for this operation")
+            if args.action == "assessment":
+                print(json.dumps({"assessment_sha256": store.assessment_hash(args.candidate)}))
+            elif args.action == "rank":
+                print(json.dumps(store.rank(args.candidate), indent=2))
+            elif args.action == "inspect":
+                print(json.dumps(store.candidate(args.candidate), indent=2))
+            elif args.action == "evaluate":
+                store.evaluate(args.candidate, data)
+                print(json.dumps({"recorded": True}))
+            else:
+                store.select(args.candidate, data)
+                print(json.dumps({"selected": True, "live_agents_changed": False}))
+        return
+    if args.command == "brain-ingest":
+        digest = CompanyBrain(args.database).ingest(
+            args.company, args.source, args.file.read_text(), args.owner,
+            args.expires, args.roles)
+        print(json.dumps({"sha256": digest}))
+        return
+    if args.command == "brain-query":
+        print(json.dumps(CompanyBrain(args.database).query(
+            args.company, args.role, args.question, args.max_chars), indent=2))
+        return
 
     if args.command == "validate-config":
         config = load_factory(args.config)
@@ -50,13 +106,13 @@ def main() -> None:
             parser.error("--payload must be a JSON object")
         message = Message(
             uuid4().hex, args.correlation, args.sender, args.recipient,
-            args.kind, payload, datetime.now(UTC).isoformat(),
+            args.kind, payload, datetime.now(UTC).isoformat(), args.channel,
         )
         event_hash = Ledger(args.ledger).message(message)
         print(json.dumps({"message_id": message.message_id, "event_hash": event_hash}))
         return
     if args.command == "inbox":
-        print(json.dumps(Ledger(args.ledger).inbox(args.recipient, args.after), indent=2))
+        print(json.dumps(Ledger(args.ledger).inbox(args.recipient, args.after, args.channel), indent=2))
         return
     raw = json.loads(args.decision.read_text())
     decision = Decision(

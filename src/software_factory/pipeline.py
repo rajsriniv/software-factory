@@ -34,8 +34,8 @@ class FactoryState:
     gates: dict[str, GateResult] = field(default_factory=dict)
     history: list[dict[str, str]] = field(default_factory=list)
     required_gates: tuple[str, ...] = (
-        "build", "unit", "integration", "security", "dependencies",
-        "e2e", "iac", "provenance", "rollback",
+        "build", "unit", "integration", "tdd", "e2e-coverage", "security", "dependencies",
+        "e2e", "iac", "provenance", "rollback", "network-security", "observability",
     )
 
     def transition(self, target: Stage, actor: str, reason: str) -> None:

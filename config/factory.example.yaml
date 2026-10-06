@@ -4,6 +4,19 @@ factory:
   state_directory: .factory-state
   max_parallel_tasks: 4
 agents:
+  improvement-proposer: {host: copilot, tier: high, model: high-model-id, tools: [read]}
+  evaluation-judge: {host: copilot, tier: high, model: high-model-id, tools: [read]}
+  ux: {host: copilot, tier: high, model: high-model-id, tools: [read, research, browser]}
+  ui: {host: copilot, tier: high, model: high-model-id, tools: [read, browser]}
+  security-architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
+  code-mapper: {host: copilot, tier: high, model: high-model-id, tools: [read]}
+  devops: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
+  network: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, deploy]}
+  observability: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test]}
+  tdd-guide: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test]}
+  sdet: {host: copilot, tier: high, model: high-model-id, tools: [read, edit, test, browser]}
+  prompt-refiner: {host: copilot, tier: high, model: high-model-id, tools: [read, knowledge-query]}
+  company-brain: {host: copilot, tier: high, model: high-model-id, tools: [read, knowledge-query]}
   product: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
   architect: {host: copilot, tier: high, model: high-model-id, tools: [read, research]}
   security: {host: copilot, tier: high, model: high-model-id, tools: [read, scan]}
@@ -15,7 +28,7 @@ agents:
   reviewer: {host: copilot, tier: high, model: high-model-id, tools: [read, test, scan]}
   release: {host: copilot, tier: high, model: high-model-id, tools: [read, deploy]}
 councils:
-  architecture: [architect, security, reviewer]
+  architecture: [architect, security-architect, security, quality, reviewer]
   implementation: [planner, quality, reviewer]
   release: [security, quality, release]
 profiles:

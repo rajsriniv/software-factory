@@ -25,3 +25,36 @@ Proposer, implementer, and final reviewer are separate runs. Nominally different
 
 Material architecture or requirement changes invalidate affected plans and approvals. Rollback and correction proposals follow the same approval path as forward changes. No agent may autonomously change production data or deploy a correction.
 
+
+## Extended workflow approvals
+
+- Prompt Refiner preserves the original request and produces traceable requirements. A human approves the exact refined-brief revision and hash before architecture; changed briefs require renewed approval.
+- Architect and Security Architect jointly prepare secure designs. The security reviewer remains independent. The example architecture council has five members; implementation and release councils have three each.
+- UX/UI work requires human design review before dependent frontend implementation. The independent reviewer checks rendered behavior, accessibility and approved-design conformance.
+- TDD guide and SDET may author tests; quality independently verifies requirement coverage and execution evidence.
+- Company Brain provides cited context. Knowledge imports require source-owner authorization; retrieval does not grant tools, votes or approval authority.
+
+The controller's default verification prerequisites are `build`, `unit`,
+`integration`, `tdd`, `e2e-coverage`, `security`, `dependencies`, `e2e`, `iac`,
+`provenance`, `rollback`, `network-security` and `observability`. The example
+configuration's `immutable_gates` list is separate policy metadata; it does not
+replace `FactoryState.required_gates`.
+
+## Optional improvement governance
+
+Prompt/workflow experiments require a separately authorized evaluation plan and
+budget. Candidate overlays cannot change protected policy, tests, permissions or
+live agents. Smoke checks precede pairwise judging; benchmark and independent
+review evidence precede selection. Exact approval binds the candidate, policy,
+evaluation plan and assessment hashes. Selection records do not activate an
+overlay; adoption requires a separate authorized, reviewed change with rollback.
+See the [improvement workflow](skills/software-factory/references/improvement.md).
+
+## Enforcement responsibility
+
+Python checks validate supplied records, not human identity or evidence provenance.
+The host must authenticate approvals, verify actual test execution and resolved
+models, enforce separation of duties and refresh approvals after artifact changes.
+Prompt and design approval requirements are currently enforced by the workflow and
+host, rather than dedicated controller transitions. Local database ownership can
+bypass storage-level protections; deploy appropriate access controls and backups.

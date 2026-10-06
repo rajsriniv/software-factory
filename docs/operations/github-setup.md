@@ -10,3 +10,26 @@ Create the Terraform state bucket separately with versioning, encryption, public
 
 The included deployment workflow creates a plan, stores it for seven days, pauses at the protected environment, verifies the plan hash, and applies the same binary plan. Before real use, add IaC policy scanning, cost estimation, SBOM/provenance verification for the referenced image digest, application smoke tests, alarms, and automated rollback initiation subject to the approved runbook. Production corrections still require explicit human approval.
 
+
+## Configuration alignment and current scope
+
+The workflow's target environments are `dev`, `stage` and `prod`, while the example
+factory configuration names `production`. Align that value with your chosen
+protected environment before integration; the deployment workflow uses its input,
+not the factory YAML, to choose the GitHub Environment.
+
+The plan job has no GitHub Environment binding. Put `AWS_PLAN_ROLE_ARN`,
+`AWS_REGION` and `TF_STATE_BUCKET` at repository or organization scope so it can
+read them. The apply job can read `AWS_DEPLOY_ROLE_ARN` from its selected protected
+environment, along with any appropriate variable overrides. Configure OIDC trust
+for each job's actual subject rather than assuming both use an environment subject.
+
+The Terraform blueprint creates a KMS key and CloudWatch log group and outputs the
+supplied image digest. It does not deploy that image or provision a complete service,
+network, load balancer or API Gateway. Platform specialist role definitions do not
+provision those resources automatically.
+
+GitHub CI covers control-plane checks and static blueprint validation. The AWS
+workflow is not connected to `FactoryState` and does not consume its 13 gate
+records. Integrate independently verified release evidence and approval checks
+before treating it as a complete factory release pipeline.

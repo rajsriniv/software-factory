@@ -10,17 +10,24 @@ The factory does not equate consensus with correctness. Councils vote on reversi
 
 ```mermaid
 flowchart TD
-    A["Requirement intake"] --> B["Architecture council"]
-    B --> C{"Human approves revision?"}
+    K["Company Brain cited context"] --> A["Product intake and prompt refinement"]
+    A --> R{"Human approves refined brief?"}
+    R -- Revise --> A
+    R -- Approved --> B["Architecture and security design council"]
+    B --> C{"Human approves architecture?"}
     C -- Revise --> B
-    C -- Approved --> D["Implementation planner"]
-    D --> E["Java / Python / React workers"]
-    E --> F["Independent review and E2E"]
-    F --> G{"Deterministic gates pass?"}
+    C -- Approved --> D["Planning and applicable UX/UI design approval"]
+    D --> E["TDD-guided Java / Python / React implementation"]
+    E --> F["SDET tests and independent quality / security / UI review"]
+    F --> G{"All required gates pass?"}
     G -- Repair --> E
-    G -- Pass --> H{"Human production approval?"}
-    H -- Approved --> I["AWS release manager"]
+    G -- Pass --> H{"Human approves exact release artifact?"}
+    H -- Approved --> I["Release and platform specialists"]
 ```
+
+This diagram describes the governed workflow. Refined-brief and design approvals
+are agent workflow requirements; they are not separate states enforced by the
+current Python controller.
 
 Agent communication is stored as structured, append-only events with a hash chain. Each handoff carries requirement IDs, artifact hashes, assumptions, scope, acceptance criteria, and evidence. A controller derives lifecycle state; agents cannot declare global success.
 
@@ -28,12 +35,19 @@ Agent communication is stored as structured, append-only events with a hash chai
 
 | Stage | Agents | Model tier | Mutation authority |
 | --- | --- | --- | --- |
-| Intake | Product analyst | High | Requirements only |
-| Architecture | Architect, security, independent reviewer | High | Architecture documents |
-| Planning | Planner, quality, reviewer | High | Work packets |
-| Implementation | Java, Python, React workers | Lower | Assigned worktree paths |
-| Verification | Quality, security, reviewer | High | Evidence only |
-| Release | Release manager | High | Approved immutable artifact |
+| Context and intake | Company Brain, product, prompt refiner | High | Approved knowledge imports and requirement briefs |
+| Architecture | Architect, security architect; independent security, quality, reviewer | High | Architecture and threat-model artifacts |
+| Design and planning | UX, UI, planner, code mapper | High | Design specifications, repository maps and work packets |
+| Implementation | Java, Python, React workers | Lower | Assigned implementation and test paths |
+| Test development | TDD guide, SDET | High | Requirement-based tests and execution evidence |
+| Platform | DevOps, network, observability | High | Scoped infrastructure and telemetry work with applicable approvals |
+| Verification | Quality, security, reviewer | High | Independent test, security and frontend review evidence |
+| Release | Release manager | High | Explicitly approved immutable artifact |
+| Optional improvement | Improvement proposer, evaluation judge | High | Inert overlays and independent comparison evidence |
+
+The installer and example configuration define 23 roles. The architecture council
+has five members: architect, security architect, security, quality and reviewer.
+Implementation and release councils each have three members.
 
 The default configuration uses role labels rather than vendor-specific model names. Replace `high-model-id` and `low-model-id` with explicit models available in your Codex, Claude Code, or Copilot environment. Never use `auto` or `inherit` for enforced tier separation.
 
@@ -51,7 +65,7 @@ Install the reusable skill from `skills/software-factory` in your agent host. Th
 
 Blueprints provide small, auditable starting points for Java, Python, React/Playwright, and AWS Terraform. They are reference templates, not claims of production readiness. Copy them into a new product repository and tailor reliability, data, security, cost, and compliance requirements before deployment.
 
-## Governance guarantees
+## Governance requirements
 
 - Architecture and production deployments require approval of exact hashes/digests.
 - Implementers cannot review their own work.
@@ -60,19 +74,24 @@ Blueprints provide small, auditable starting points for Java, Python, React/Play
 - Safety gates veto voting outcomes.
 - Missing evidence and maximin ties escalate to humans.
 - Production corrections are never autonomous.
-- AWS uses OIDC and protected GitHub Environments; long-lived cloud keys are excluded.
+- The AWS workflow uses OIDC; operators must configure protected GitHub Environments and role trust policies.
 
-See [governance](GOVERNANCE.md), [architecture](docs/architecture/software-factory.md), [security](SECURITY.md), and [contributing](CONTRIBUTING.md).
+These are workflow requirements, not a complete security boundary. See the
+[architecture enforcement boundaries](docs/architecture/software-factory.md#enforcement-boundaries).
+
+See the [local operations guide](docs/operations/local-workflows.md), [governance](GOVERNANCE.md), [architecture](docs/architecture/software-factory.md), [security](SECURITY.md), and [contributing](CONTRIBUTING.md).
 
 ## Status
 
-This is a reference implementation. Local unit tests validate governance, state transitions, configuration, and ledger tamper detection. Real-world reliability requires live agent-host tests, repository protections, AWS integration tests, threat modeling, disaster-recovery exercises, and operating evidence for your environment.
+This is a reference implementation. Local unit tests cover governance, state transitions, configuration, ledger tamper detection and channels, Company Brain retrieval, and improvement evaluation/selection rules. Real-world reliability requires live agent-host tests, repository protections, AWS integration tests, threat modeling, disaster-recovery exercises, and operating evidence for your environment.
 
+
+## Extended workflows
 
 ### Company Brain
 
 The factory now includes `factory-company-brain`, a high-tier employee context agent
-installed for all three hosts. Its local persistent knowledge store preserves source
+available through the installer for all three supported hosts. Its local persistent knowledge store preserves source
 revisions and supplies bounded, cited context packets across sessions. Start with
 [Company Brain onboarding and boundaries](skills/software-factory/references/company-brain.md).
 Import approved company documents once using `brain-ingest`, then retrieve task-specific

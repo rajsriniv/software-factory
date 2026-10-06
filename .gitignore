@@ -1,0 +1,57 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Build output
+build/
+dist/
+target/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage/
+coverage.xml
+
+# Node / TypeScript / Playwright
+node_modules/
+.vite/
+*.tsbuildinfo
+playwright-report/
+test-results/
+blob-report/
+
+# Terraform local data, state, and saved plans
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+!*.example.tfvars
+!*.example.tfvars.json
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+!.env.template
+
+# Editor and operating-system files
+.idea/
+*.iml
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

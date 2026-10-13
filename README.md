@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml)
 
-A production-oriented reference implementation for treating the SDLC as an assembly line of specialized agents. It coordinates architecture, planning, Java/Python/React implementation, E2E verification, security review, and AWS release preparation while preserving human control of architecture and production deployment.
+A production-oriented reference implementation for treating the SDLC as an assembly line of specialized agents. It coordinates architecture, planning, Java/Python/Rust/React implementation, Rust GTK4/Iced desktop apps, E2E verification, security review, and AWS release preparation while preserving human control of architecture and production deployment.
 
 The factory does not equate consensus with correctness. Councils vote on reversible design choices. Objective failures, security/data-loss/compliance findings, unmet requirements, and human approval gates cannot be overruled. When an absolute majority is absent, the controller uses a documented adversarial maximin rule. Exact ties and high-impact uncertainty go to a human architect.
 
@@ -17,7 +17,7 @@ flowchart TD
     B --> C{"Human approves architecture?"}
     C -- Revise --> B
     C -- Approved --> D["Planning and applicable UX/UI design approval"]
-    D --> E["TDD-guided Java / Python / React implementation"]
+    D --> E["TDD-guided Java / Python / React / Rust implementation"]
     E --> F["SDET tests and independent quality / security / UI review"]
     F --> G{"All required gates pass?"}
     G -- Repair --> E
@@ -38,14 +38,14 @@ Agent communication is stored as structured, append-only events with a hash chai
 | Context and intake | Company Brain, product, prompt refiner | High | Approved knowledge imports and requirement briefs |
 | Architecture | Architect, security architect; independent security, quality, reviewer | High | Architecture and threat-model artifacts |
 | Design and planning | UX, UI, planner, code mapper | High | Design specifications, repository maps and work packets |
-| Implementation | Java, Python, React workers | Lower | Assigned implementation and test paths |
+| Implementation | Java, Python, React, Rust workers | Lower | Assigned implementation and test paths |
 | Test development | TDD guide, SDET | High | Requirement-based tests and execution evidence |
 | Platform | DevOps, network, observability | High | Scoped infrastructure and telemetry work with applicable approvals |
 | Verification | Quality, security, reviewer | High | Independent test, security and frontend review evidence |
 | Release | Release manager | High | Explicitly approved immutable artifact |
 | Optional improvement | Improvement proposer, evaluation judge | High | Inert overlays and independent comparison evidence |
 
-The installer and example configuration define 23 roles. The architecture council
+The installer and example configuration define 24 roles. The architecture council
 has five members: architect, security architect, security, quality and reviewer.
 Implementation and release councils each have three members.
 
@@ -161,3 +161,14 @@ Use `software-factory improvement --help` and the
 Two new high-tier agents propose and judge improvements. Execution, spend limits,
 model verification and human authentication remain responsibilities of the host
 and evaluation harness; automatic experimentation/adoption is not implemented.
+
+
+### Company Brain semantic retrieval
+
+Company Brain now supports optional local vector/hybrid search using sqlite-vec,
+FastEmbed and FTS5. Existing SQLite documents are preserved; index approved sources
+with `brain-index`, then query with `brain-query --mode hybrid` (or `vector`). Install
+with `.venv/bin/python -m pip install -e '.[brain]'`. Legacy queries remain lexical.
+See [Company Brain migration and limits](skills/software-factory/references/company-brain.md).
+This is exact filtered search, with chunk citations and stale-index rejection;
+learned-model quality and workload speedups require real corpus evaluation.

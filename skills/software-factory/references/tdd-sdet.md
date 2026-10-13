@@ -1,6 +1,6 @@
 # TDD and SDET
 
-Use high-tier `factory-tdd-guide` and `factory-sdet` agents on all three hosts. Keep bounded implementation on the existing lower-tier Java/Python/React agents. Only start from a human-approved refined brief and approved architecture.
+Use high-tier `factory-tdd-guide` and `factory-sdet` agents on all three hosts. Keep bounded implementation on the existing lower-tier Java/Python/React/Rust agents. Only start from a human-approved refined brief and approved architecture.
 
 ## Assembly line
 
@@ -13,7 +13,7 @@ Use high-tier `factory-tdd-guide` and `factory-sdet` agents on all three hosts. 
 
 “Complete” means every approved requirement has mapped E2E scenarios or an explicit, independently reviewed reason for another verification method. It does not mean every conceivable input is covered or that defects are impossible.
 
-Cover applicable happy paths, invalid input, boundary values, authentication and authorization, tenant isolation, persistence, retries, idempotency, duplicate messages, dependency failures and recovery. Include frontend-to-backend journeys with Playwright when a UI exists. Assert user-visible outcomes, API responses and durable data effects rather than merely HTTP 200 or screenshot existence. Use deterministic data, stable locators, bounded waits, independent fixtures and cleanup. Do not use sleeps to conceal races or retries to silently turn failures green.
+Cover applicable happy paths, invalid input, boundary values, authentication and authorization, tenant isolation, persistence, retries, idempotency, duplicate messages, dependency failures and recovery. Include frontend-to-backend journeys with Playwright when a web UI exists, and desktop journeys driven through AT-SPI or the toolkit's simulator for GTK4/Iced apps (see [Rust desktop UI](rust-desktop.md)). Assert user-visible outcomes, API responses and durable data effects rather than merely HTTP 200 or screenshot existence. Use deterministic data, stable locators, bounded waits, independent fixtures and cleanup. Do not use sleeps to conceal races or retries to silently turn failures green.
 
 For Python/PySpark/Iceberg services, include applicable ingest-to-output journeys: real configured source fixtures through transformation to persisted tables and consumption, YAML validation, deduplication, schema evolution, late data, reconciliation and failure recovery. For AWS, test in a designated nonproduction account/environment with scoped credentials. Confirm catalog/engine compatibility from project sources. Mocks belong in unit/integration tests; clearly identify stubbed E2E dependencies and gaps to real end-to-end validation.
 

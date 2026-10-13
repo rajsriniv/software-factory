@@ -12,6 +12,7 @@ license = {text = "Apache-2.0"}
 dependencies = ["PyYAML>=6.0.2,<7"]
 
 [project.optional-dependencies]
+brain = ["sqlite-vec>=0.1.9,<0.2", "fastembed>=0.9,<0.10"]
 dev = ["pytest>=8,<9", "ruff>=0.11,<1", "mypy>=1.15,<2", "types-PyYAML>=6.0.12,<7"]
 
 [project.scripts]

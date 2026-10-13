@@ -29,11 +29,12 @@ ROLES = {
     "java": "Implement assigned Java backend tasks and tests only.",
     "python": "Implement assigned Python or PySpark backend tasks and tests only.",
     "react": "Implement assigned React frontend tasks and component tests only.",
+    "rust": "Implement assigned Rust service, library, CLI, GTK4 or Iced desktop tasks and tests only; read references/rust.md and, for desktop UI, references/rust-desktop.md.",
     "quality": "Run independent contract, integration, accessibility, and E2E verification.",
-    "reviewer": "Independently review backend and UI code against requirements, approved designs, accessibility, security and evidence; read references/ux-ui.md for frontend review.",
+    "reviewer": "Independently review backend and UI code against requirements, approved designs, accessibility, security and evidence; read references/ux-ui.md for frontend review and references/rust.md for Rust code.",
     "release": "Assemble provenance and deploy an explicitly approved immutable artifact.",
 }
-LOW = {"java", "python", "react"}
+LOW = {"java", "python", "react", "rust"}
 
 
 def main() -> None:

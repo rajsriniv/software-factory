@@ -40,7 +40,9 @@ def main() -> None:
     inbox.add_argument("--after", type=int, default=0)
     ingest = sub.add_parser("brain-ingest")
     query = sub.add_parser("brain-query")
-    for command in (ingest, query):
+    index = sub.add_parser("brain-index")
+    index.add_argument("--model", default="BAAI/bge-small-en-v1.5")
+    for command in (ingest, query, index):
         command.add_argument("--database", type=Path, required=True)
         command.add_argument("--company", required=True)
     ingest.add_argument("--source", required=True)
@@ -48,6 +50,10 @@ def main() -> None:
     ingest.add_argument("--owner", required=True)
     ingest.add_argument("--expires", required=True)
     ingest.add_argument("--roles", nargs="+", required=True)
+    query.add_argument("--mode", choices=("lexical", "vector", "hybrid"), default="lexical")
+    query.add_argument("--model", default="BAAI/bge-small-en-v1.5")
+    query.add_argument("--top-k", type=int, default=5)
+    query.add_argument("--min-similarity", type=float, default=0.35)
     query.add_argument("--role", required=True)
     query.add_argument("--question", required=True)
     query.add_argument("--max-chars", type=int, default=6000)
@@ -86,6 +92,20 @@ def main() -> None:
             args.company, args.source, args.file.read_text(), args.owner,
             args.expires, args.roles)
         print(json.dumps({"sha256": digest}))
+        return
+    if args.command == "brain-index" or (args.command == "brain-query" and args.mode != "lexical"):
+        from .vector_brain import VectorBrain
+        try:
+            brain = VectorBrain(args.database, model=args.model)
+            if args.command == "brain-index":
+                print(json.dumps(brain.index(args.company), indent=2))
+            else:
+                print(json.dumps(brain.query(args.company, args.role, args.question,
+                    args.max_chars, args.top_k, args.min_similarity, args.mode), indent=2))
+        except ImportError:
+            parser.error("Install vector support with pip install '.[brain]'")
+        except ValueError as exc:
+            parser.error(str(exc))
         return
     if args.command == "brain-query":
         print(json.dumps(CompanyBrain(args.database).query(

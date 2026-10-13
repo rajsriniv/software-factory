@@ -14,11 +14,12 @@ All notable changes follow Keep a Changelog. This project uses Semantic Versioni
 - Security Architect and a five-member architecture council with independent security review.
 - UX/UI specialists, human design review and explicit independent frontend review responsibilities.
 - Optional prompt/workflow improvement archive, evaluation imports, pairwise ranking and approval-bound selection records.
+- Rust implementation role with Rust service/library and GTK4/Iced desktop UI references, including desktop accessibility, E2E and packaging guidance.
 - Local operations guide covering CLI commands, storage and implementation boundaries.
 
 ### Changed
 
-- Installer and example configuration now include 23 roles; Java, Python and React remain the three lower-tier implementation roles.
+- Installer and example configuration now include 24 roles; Java, Python, React and Rust are the four lower-tier implementation roles.
 - Architecture, governance and contributor documentation now distinguish implemented checks from host-enforced workflow requirements.
 
 ## [0.1.0] - 2026-09-17

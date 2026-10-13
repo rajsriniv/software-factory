@@ -24,6 +24,7 @@ agents:
   java: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
   python: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
   react: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
+  rust: {host: copilot, tier: low, model: low-model-id, tools: [read, edit, test]}
   quality: {host: copilot, tier: high, model: high-model-id, tools: [read, test, browser]}
   reviewer: {host: copilot, tier: high, model: high-model-id, tools: [read, test, scan]}
   release: {host: copilot, tier: high, model: high-model-id, tools: [read, deploy]}
@@ -38,6 +39,8 @@ profiles:
     build: [python, -m, pytest]
   react:
     build: [npm, run, build]
+  rust:
+    build: [cargo, test, --workspace, --locked]
   e2e:
     build: [npx, playwright, test]
 aws:

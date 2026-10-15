@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import sqlite3
+import sys
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -11,6 +13,7 @@ from .brain import CompanyBrain
 from .config import load_factory
 from .governance import decide
 from .improvement import ImprovementStore
+from .knowledge_updates import KnowledgeUpdates
 from .ledger import Ledger
 from .models import Decision, Message, Option, Vote
 
@@ -62,7 +65,98 @@ def main() -> None:
     improvement.add_argument("--database", type=Path, required=True)
     improvement.add_argument("--input", type=Path, help="JSON operation payload")
     improvement.add_argument("--candidate")
+    updates = sub.add_parser("brain-updates")
+    updates.add_argument("action", choices=("propose", "inspect", "review", "approve", "reject", "publish", "events"))
+    updates.add_argument("--database", type=Path, required=True)
+    updates.add_argument("--input", type=Path)
+    updates.add_argument("--proposal")
+    updates.add_argument("--actor")
+    updates.add_argument("--evidence")
+    updates.add_argument("--pass-review", action="store_true")
+    updates.add_argument("--task-id")
+    updates.add_argument("--model", default="BAAI/bge-small-en-v1.5")
+    workflow = sub.add_parser("workflow")
+    workflow.add_argument("action", choices=("status", "next", "approve", "events", "repair", "doctor"))
+    workflow.add_argument("--database", type=Path, required=True)
+    workflow.add_argument("--manifest", type=Path, required=True)
+    workflow.add_argument("--repository", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "workflow":
+        from .workflow import Workflow
+        try:
+            controller = Workflow(args.database, args.manifest, args.repository)
+            if args.action == "doctor":
+                workflow_result = controller.doctor()
+            elif args.action == "status":
+                workflow_result = controller.status()
+            elif args.action == "events":
+                workflow_result = {"events": controller.audit_events()}
+            elif args.action == "repair":
+                if not sys.stdin.isatty():
+                    parser.error("Human repair request requires an interactive controller terminal")
+                phase = controller.status()["next"]
+                target = phase.rsplit("/", 1)[0] + "/implement"
+                phrase = f"REPAIR {controller.run_id} {target} {controller.snapshot()}"
+                print("Review failed evidence, then type: " + phrase)
+                workflow_result = controller.repair(input())
+            elif args.action == "approve":
+                if not sys.stdin.isatty():
+                    parser.error("Human approval requires a controller-owned interactive terminal")
+                status = controller.status()
+                print(json.dumps({"status": status, "events": controller.events()}, indent=2))
+                phrase = f"APPROVE {status['next']} {controller.fingerprint} {controller.snapshot()}"
+                print("Review the evidence above, then type: " + phrase)
+                confirmation = input()
+                if confirmation != phrase:
+                    parser.error("Approval not confirmed")
+                approval = controller.sign_approval() if controller.manifest.get("assurance") == "isolated" else confirmation
+                workflow_result = controller.advance(approval)
+            else:
+                workflow_result = controller.advance()
+            print(json.dumps(workflow_result, indent=2))
+            if workflow_result.get("success") is False or workflow_result.get("ready") is False:
+                raise SystemExit(2)
+        except (ValueError, OSError, sqlite3.Error) as exc:
+            parser.error(str(exc))
+        return
+    if args.command == "brain-updates":
+        updates_store = KnowledgeUpdates(args.database)
+        try:
+            if args.action == "propose":
+                if not args.input:
+                    parser.error("--input proposal JSON required")
+                print(json.dumps({"proposal": updates_store.propose(json.loads(args.input.read_text()))}))
+            elif args.action == "events":
+                print(json.dumps(updates_store.events(args.task_id), indent=2))
+            else:
+                if not args.proposal:
+                    parser.error("--proposal required")
+                if args.action == "inspect":
+                    print(json.dumps(updates_store.inspect(args.proposal), indent=2))
+                elif args.action == "publish":
+                    from .vector_brain import VectorBrain
+                    def index_company(company: str) -> object:
+                        return VectorBrain(args.database, model=args.model).index(company)
+                    print(json.dumps(updates_store.publish(args.proposal, index_company), indent=2))
+                else:
+                    if not args.actor or not args.evidence:
+                        parser.error("--actor and --evidence required")
+                    if args.action == "review":
+                        updates_store.review(args.proposal, args.actor, args.evidence, args.pass_review)
+                    elif args.action == "reject":
+                        updates_store.reject(args.proposal, args.actor, args.evidence)
+                    else:
+                        if not sys.stdin.isatty():
+                            parser.error("Human approval requires an interactive terminal")
+                        print(json.dumps(updates_store.inspect(args.proposal), indent=2))
+                        confirmation = input("To approve this exact document, type APPROVE " + args.proposal + ": ")
+                        if confirmation != "APPROVE " + args.proposal:
+                            parser.error("Approval not confirmed; no knowledge imported")
+                        updates_store.approve(args.proposal, args.actor, args.evidence, args.proposal)
+                    print(json.dumps({"state": updates_store.inspect(args.proposal)["state"]}))
+        except (ValueError, ImportError) as exc:
+            parser.error(str(exc))
+        return
     if args.command == "improvement":
         store = ImprovementStore(args.database)
         data = json.loads(args.input.read_text()) if args.input else {}
@@ -142,7 +236,7 @@ def main() -> None:
         options=tuple(Option(**option) for option in raw["options"]),
         votes=[Vote(**vote) for vote in raw["votes"]],
     )
-    result = decide(decision, mandatory_gates_passed=bool(raw["mandatory_gates_passed"]))
+    result = decide(decision, mandatory_gates_passed=raw["mandatory_gates_passed"])
     created = datetime.now(UTC).isoformat()
     Ledger(args.ledger).decision(result, created)
     print(json.dumps(asdict(result), indent=2))

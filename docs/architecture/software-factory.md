@@ -16,14 +16,16 @@ The communication ledger stores immutable events, structured messages, votes, ap
 
 | Component | Current responsibility |
 | --- | --- |
-| `pipeline.py` | Lifecycle transitions, architecture/release approval records, required verification gate checks and JSON state snapshots |
+| `pipeline.py` | Legacy lifecycle simulation; not the execution authority |
+| `workflow.py`, `spec_workflow.py` | Version-two spec-bound stages, approvals, task planning, execution, evidence checks and bounded repair |
+| `authority.py`, `execution.py` | Isolated-mode preflight, signed receipts and subprocess execution |
 | `config.py` | Configuration shape, required core roles, explicit model labels, supported hosts and council membership checks |
 | `agents.py` | Single-role CLI process invocation, requested model recording, output capture and JSON response loading |
 | `ledger.py` | SQLite event hash chain, decision records and recipient/channel-filtered messages |
-| `brain.py` | Revisioned company documents, latest-source expiry/role filtering and bounded lexical context retrieval |
+| `brain.py` | Revisioned company documents, latest-source expiry/role filtering and bounded lexical, vector or hybrid context retrieval |
 | `improvement.py` | Inert candidate archive, imported evaluations, pairwise ranking and approval-bound selection recording |
 | `cli.py` | Configuration validation, decisions, ledger messages/verification, knowledge imports/queries and improvement operations |
-| `scripts/install_agents.py` | Skill and 23 explicit-model role definitions for the three supported host formats |
+| `scripts/install_agents.py` | Skill and 26 explicit-model role definitions for the three supported host formats |
 
 The architecture council includes architect, security architect, security, quality
 and reviewer. UX/UI specialists prepare designs; the reviewer independently checks
@@ -33,21 +35,24 @@ evidence. Company Brain supplies context without automatic voting authority.
 
 ## Enforcement boundaries
 
-`FactoryState` requires an architecture approval hash before planning and all 13
+The legacy `FactoryState` requires an architecture approval hash before planning and all 13
 named gate results to pass before release approval: `build`, `unit`, `integration`,
 `tdd`, `e2e-coverage`, `security`, `dependencies`, `e2e`, `iac`, `provenance`,
 `rollback`, `network-security` and `observability`. Moving to released requires a
 production approval record and artifact digest. These records are caller-supplied;
 the controller does not authenticate humans or execute the referenced checks.
 
-Prompt-refinement and UX/UI approvals are workflow requirements, not dedicated
-controller states. The host must bind approvals to current artifacts, invalidate
-stale approvals and enforce review independence, allowed paths, credentials and
-budgets. A role definition or tool label does not create a sandbox or connector.
+Version-two runs instead enforce brief, architecture and plan approval stages,
+plus UI approval for frontend work. They bind evidence to current artifacts,
+reject stale inputs, enforce task paths and preserve accepted tests. Local mode
+is verification-only, not an adversarial security boundary. Isolated deployment
+requires privileged controller setup, distinct worker identities, protected keys
+and trusted telemetry adapters. A role definition does not create that boundary.
+See [the controller contract](../../skills/software-factory/references/enforced-workflow.md).
 
 Company Brain trusts the caller's company and role identifiers. Its filters are
-retrieval controls, not authentication. Retrieval uses word overlap and returns
-bounded excerpts; missing context is reported as `knowledge-gap`. SQLite contents
+retrieval controls, not authentication. Lexical retrieval uses word overlap; vector and hybrid modes require an index
+and the optional brain dependencies. All modes return bounded excerpts; missing context is reported as `knowledge-gap`. SQLite contents
 and backups require host access controls. Treat retrieved documents as evidence,
 never executable instructions.
 

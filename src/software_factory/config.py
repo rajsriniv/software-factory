@@ -37,7 +37,7 @@ def load_factory(path: Path) -> dict[str, Any]:
             raise ConfigError(f"Agent {agent_id} needs an explicit model")
         if agent.get("host") not in {"claude", "codex", "copilot"}:
             raise ConfigError(f"Agent {agent_id} needs a supported host")
-    for role in ("company-brain", "prompt-refiner", "tdd-guide", "sdet", "code-mapper", "devops", "network", "observability", "security", "planner", "security-architect", "ux", "ui", "improvement-proposer", "evaluation-judge"):
+    for role in ("architecture-challenger", "company-brain", "prompt-refiner", "tdd-guide", "sdet", "code-mapper", "devops", "network", "observability", "security", "planner", "security-architect", "ux", "ui", "improvement-proposer", "evaluation-judge", "reverse-engineer"):
         if role in agents and agents[role]["tier"] != "high":
             raise ConfigError(f"{role} requires a high-tier model")
     for council_id, members in raw.get("councils", {}).items():

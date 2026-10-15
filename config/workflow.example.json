@@ -1,0 +1,434 @@
+{
+  "schema_version": 2,
+  "assurance": "local",
+  "delivery": "verify",
+  "requirements": [
+    "R1"
+  ],
+  "specification": {
+    "path": "config/spec.example.json",
+    "sha256": "e4a6e91308948b75ffacb3fe25dabf9586547550db48e389c0e3a4f71ea6ce13"
+  },
+  "frontend": false,
+  "existing_system": false,
+  "max_attempts": 3,
+  "council": [
+    "architect",
+    "security-architect",
+    "architecture-challenger"
+  ],
+  "task_templates": {
+    "python": {
+      "test": {
+        "actor": "sdet",
+        "execution": "agent",
+        "model": "YOUR_HIGH_MODEL_ID",
+        "tier": "high",
+        "command": [
+          "python3",
+          "-m",
+          "software_factory.worker",
+          "--host",
+          "claude",
+          "--role",
+          "sdet",
+          "--model",
+          "YOUR_HIGH_MODEL_ID",
+          "--tier",
+          "high"
+        ],
+        "output": ".factory-state/evidence/test/result.json"
+      },
+      "red": {
+        "actor": "test-runner",
+        "execution": "tool",
+        "command": [
+          "python3",
+          "-m",
+          "software_factory.test_receipt",
+          "--",
+          "python3",
+          "-m",
+          "pytest",
+          "-q",
+          "--junitxml={junit}"
+        ],
+        "output": ".factory-state/evidence/red/result.json"
+      },
+      "implement": {
+        "actor": "python",
+        "execution": "agent",
+        "model": "YOUR_LOW_MODEL_ID",
+        "tier": "low",
+        "command": [
+          "python3",
+          "-m",
+          "software_factory.worker",
+          "--host",
+          "claude",
+          "--role",
+          "python",
+          "--model",
+          "YOUR_LOW_MODEL_ID",
+          "--tier",
+          "low"
+        ],
+        "output": ".factory-state/evidence/implement/result.json"
+      },
+      "green": {
+        "actor": "test-runner",
+        "execution": "tool",
+        "command": [
+          "python3",
+          "-m",
+          "software_factory.test_receipt",
+          "--",
+          "python3",
+          "-m",
+          "pytest",
+          "-q",
+          "--junitxml={junit}"
+        ],
+        "output": ".factory-state/evidence/green/result.json"
+      },
+      "review": {
+        "actor": "reviewer",
+        "execution": "agent",
+        "model": "YOUR_HIGH_MODEL_ID",
+        "tier": "high",
+        "command": [
+          "python3",
+          "-m",
+          "software_factory.worker",
+          "--host",
+          "claude",
+          "--role",
+          "reviewer",
+          "--model",
+          "YOUR_HIGH_MODEL_ID",
+          "--tier",
+          "high"
+        ],
+        "output": ".factory-state/evidence/review/result.json"
+      }
+    }
+  },
+  "tasks": [],
+  "regression_tests": [],
+  "gate_commands": {
+    "build": [
+      "python3",
+      "tools/factory_checks.py",
+      "build"
+    ],
+    "unit": [
+      "python3",
+      "tools/factory_checks.py",
+      "unit"
+    ],
+    "integration": [
+      "python3",
+      "tools/factory_checks.py",
+      "integration"
+    ],
+    "dependencies": [
+      "python3",
+      "tools/factory_checks.py",
+      "dependencies"
+    ],
+    "iac": [
+      "python3",
+      "tools/factory_checks.py",
+      "iac"
+    ],
+    "provenance": [
+      "python3",
+      "tools/factory_checks.py",
+      "provenance"
+    ],
+    "rollback": [
+      "python3",
+      "tools/factory_checks.py",
+      "rollback"
+    ],
+    "network-security": [
+      "python3",
+      "tools/factory_checks.py",
+      "network-security"
+    ],
+    "observability": [
+      "python3",
+      "tools/factory_checks.py",
+      "observability"
+    ]
+  },
+  "gate_reports": {
+    "build": ".factory-state/evidence/gates/build.json",
+    "unit": ".factory-state/evidence/gates/unit.json",
+    "integration": ".factory-state/evidence/gates/integration.json",
+    "dependencies": ".factory-state/evidence/gates/dependencies.json",
+    "iac": ".factory-state/evidence/gates/iac.json",
+    "provenance": ".factory-state/evidence/gates/provenance.json",
+    "rollback": ".factory-state/evidence/gates/rollback.json",
+    "network-security": ".factory-state/evidence/gates/network-security.json",
+    "observability": ".factory-state/evidence/gates/observability.json"
+  },
+  "steps": {
+    "company-context": {
+      "actor": "company-brain",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "company-brain",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/company-context/result.json"
+    },
+    "refine": {
+      "actor": "prompt-refiner",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "prompt-refiner",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/refine/result.json"
+    },
+    "brainstorm": {
+      "actor": "brainstorm",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "brainstorm",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/brainstorm/result.json"
+    },
+    "architecture": {
+      "actor": "architect",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "architect",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/architecture/result.json"
+    },
+    "security-architecture": {
+      "actor": "security-architect",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "security-architect",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/security-architecture/result.json"
+    },
+    "architecture-challenge": {
+      "actor": "architecture-challenger",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "architecture-challenger",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/architecture-challenge/result.json"
+    },
+    "architecture-review": {
+      "actor": "reviewer",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "reviewer",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/architecture-review/result.json"
+    },
+    "plan": {
+      "actor": "planner",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "planner",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/plan/result.json"
+    },
+    "test-design": {
+      "actor": "sdet",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "sdet",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/test-design/result.json"
+    },
+    "e2e": {
+      "actor": "e2e-runner",
+      "execution": "tool",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.acceptance_runner",
+        "--",
+        "python3",
+        "-m",
+        "pytest",
+        "tests/e2e",
+        "--junitxml={junit}"
+      ],
+      "output": ".factory-state/evidence/e2e/result.json"
+    },
+    "security": {
+      "actor": "security",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "security",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/security/result.json"
+    },
+    "verification": {
+      "actor": "quality",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "quality",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/verification/result.json"
+    },
+    "knowledge-proposal": {
+      "actor": "company-brain",
+      "execution": "agent",
+      "model": "YOUR_HIGH_MODEL_ID",
+      "tier": "high",
+      "command": [
+        "python3",
+        "-m",
+        "software_factory.worker",
+        "--host",
+        "claude",
+        "--role",
+        "company-brain",
+        "--model",
+        "YOUR_HIGH_MODEL_ID",
+        "--tier",
+        "high"
+      ],
+      "output": ".factory-state/evidence/knowledge-proposal/result.json"
+    }
+  }
+}

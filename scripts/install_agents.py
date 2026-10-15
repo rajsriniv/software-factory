@@ -9,6 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {
+    "architecture-challenger": "Challenge architectural assumptions, failure modes and unsupported claims; produce evidence-backed objections and require resolution before council approval.",
+    "reverse-engineer": "Reconstruct existing behavior, contracts and baseline architecture from source and verified evidence; read references/reverse-engineering.md. Separate observations from inference; do not modify the target system.",
     "improvement-proposer": "Propose isolated prompt/workflow overlays from observed failures; read references/improvement.md. Never change policies, code, credentials or live agents.",
     "evaluation-judge": "Independently compare eligible prompt/workflow candidates; read references/improvement.md. Rank evaluation priority only, never approve adoption.",
     "ux": "Design evidence-backed user journeys, information architecture and accessible interactions; read references/ux-ui.md. Validate assumptions and obtain human design approval.",
@@ -60,7 +62,9 @@ def main() -> None:
         instruction = (
             f"{purpose} Use the software-factory skill and structured messages. "
             "Preserve requirement and artifact hashes. Provide evidence, declare uncertainty, "
-            "and never approve your own work. Never bypass hard gates or human approvals."
+            "and never approve your own work. Never bypass hard gates or human approvals. "
+            "Read references/enforced-workflow.md. Accept only the current controller task; "
+            "emit evidence, never advance or approve the workflow yourself."
         )
         if args.host == "codex":
             body = (

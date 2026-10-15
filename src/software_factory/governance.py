@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from math import isfinite
 
 from .models import Decision
 
@@ -11,8 +12,23 @@ class DecisionError(ValueError):
 
 def _validate(decision: Decision) -> None:
     voters = set(decision.eligible_voters)
+    if len(voters) != len(decision.eligible_voters):
+        raise DecisionError("Eligible voter IDs must be unique")
+    if not decision.options:
+        raise DecisionError("At least one option required")
+    dimensions = set(decision.options[0].utilities)
+    for option in decision.options:
+        if not dimensions or set(option.utilities) != dimensions:
+            raise DecisionError("Options require the same nonempty utility dimensions")
+        if any(
+            type(v) not in (int, float) or not isfinite(v) or not -1 <= v <= 1
+            for v in option.utilities.values()
+        ):
+            raise DecisionError("Utilities must be finite and normalized to [-1, 1]")
     if len(voters) < 3 or len(voters) % 2 == 0:
-        raise DecisionError("A decision council must contain an odd number of at least three voters")
+        raise DecisionError(
+            "A decision council must contain an odd number of at least three voters"
+        )
     if len({option.option_id for option in decision.options}) != len(decision.options):
         raise DecisionError("Option IDs must be unique")
     seen: set[str] = set()
@@ -39,12 +55,32 @@ def decide(decision: Decision, mandatory_gates_passed: bool) -> Decision:
     damaging credible dimension. An exact tie is escalated to a human.
     """
     _validate(decision)
+    decision.outcome = None
+    decision.method = None
+    decision.status = "open"
+    if type(mandatory_gates_passed) is not bool:
+        raise DecisionError("Mandatory gate result must be a boolean")
     if not mandatory_gates_passed:
         decision.status = "blocked"
         decision.method = "policy-veto"
         return decision
 
-    approved = [vote.option_id for vote in decision.votes if vote.approve]
+    eligible_options = {o.option_id for o in decision.options if not o.disqualifiers}
+    if not eligible_options:
+        decision.status, decision.method = "blocked", "all-options-disqualified"
+        return decision
+    # Complete independent assessments are required even when a majority is apparent.
+    if len(decision.votes) != len(decision.eligible_voters):
+        decision.status, decision.method = "human-review", "incomplete-council"
+        return decision
+    if any(v.conflicts for v in decision.votes):
+        decision.status, decision.method = "human-review", "unresolved-conflicts"
+        return decision
+    approved = [
+        vote.option_id
+        for vote in decision.votes
+        if vote.approve is True and vote.option_id in eligible_options
+    ]
     counts = Counter(approved)
     threshold = len(decision.eligible_voters) // 2 + 1
     winners = [option_id for option_id, count in counts.items() if count >= threshold]
@@ -56,7 +92,11 @@ def decide(decision: Decision, mandatory_gates_passed: bool) -> Decision:
     if len(winners) > 1:
         raise DecisionError("Contradictory majority; inspect voting inputs")
 
-    candidates = [option for option in decision.options if not option.disqualifiers]
+    candidates = [
+        option
+        for option in decision.options
+        if not option.disqualifiers and option.option_id in approved
+    ]
     if not candidates:
         decision.status = "blocked"
         decision.method = "all-options-disqualified"
@@ -82,7 +122,8 @@ def decide(decision: Decision, mandatory_gates_passed: bool) -> Decision:
 
 def safety_gates(findings: list[dict[str, str]], checks: list[dict[str, object]]) -> bool:
     material = {"blocker", "major"}
-    return not any(f.get("severity", "").lower() in material for f in findings) and all(
-        bool(check.get("passed")) for check in checks
+    return (
+        bool(checks)
+        and not any(f.get("severity", "").lower() in material for f in findings)
+        and all(check.get("passed") is True for check in checks)
     )
-

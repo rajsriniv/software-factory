@@ -5,13 +5,17 @@ description: Run a governed multi-agent SDLC assembly line for Java, Python or R
 
 # Software Factory
 
+Start with [spec-driven development](references/spec-driven-development.md). Use version-two manifests for new work. Bind the approved specification and each acceptance criterion to executable evidence. Run `workflow doctor` before execution, and report local verification separately from an independently verified release.
+
+Use the [enforced workflow controller](references/enforced-workflow.md) for every execution and handoff. Read that reference before starting work. Stop if a trusted controller has not been configured; never fall back to prose-only handoffs or the legacy FactoryState simulation. Only report completion from `workflow status` showing `complete`.
+
 Use this repository's controller, configuration, governance, and blueprints. Treat agents as specialized workers and critics, not sources of truth. Bind every handoff to requirement IDs, repository revision, artifact hashes, acceptance criteria, evidence, assumptions, and unresolved questions.
 
 Before intake and each stage, consult Company Brain using [company context](references/company-brain.md). Bind its source revisions to the task and refresh before approval.
 
 Run [prompt refinement](references/prompt-refiner.md) at intake and whenever the requirement changes. Present every refined brief for mandatory human review. Wait for explicit approval tied to its revision and saved artifact hash before handing it to product or architecture. Any edit invalidates that approval; present the revised brief again. Do not treat inferred requirements as approved.
 
-Follow intake/refinement -> human refined-brief approval -> architecture council -> human architecture approval -> planning and SDET test design -> TDD implementation -> SDET E2E execution -> independent verification -> human release approval -> AWS release (or signed package release for desktop apps). Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, React, and Rust tasks. Verify actual model resolution rather than relying on agent claims.
+Follow intake/refinement -> human refined-brief approval -> architecture council -> human architecture approval -> planning -> human plan approval -> SDET test design -> TDD implementation -> SDET E2E execution -> independent verification -> human release approval -> AWS release and independent deployment verification when isolated deployment is configured. Local verification mode stops before release. Use high-tier explicit models for product analysis, architecture, planning, security, quality, review, and release; use lower-tier explicit models for bounded Java, Python, React, and Rust tasks. Verify actual model resolution rather than relying on agent claims.
 
 For architecture work, read [TOGAF-aligned architecture](references/architecture.md). For governance and decision rules, read [factory governance](references/governance.md). For stack-specific work, read only the relevant reference: [Java](references/java.md), [Python and PySpark](references/python.md), [React and E2E](references/react-e2e.md), [Rust](references/rust.md), [Rust GTK4 and Iced desktop UI](references/rust-desktop.md) (read with Rust), or [AWS](references/aws.md).
 
@@ -28,3 +32,7 @@ During architecture, have the architect and high-tier security architect jointly
 For user-facing products, involve high-tier UX and UI specialists before frontend implementation. Follow [UX, UI and independent frontend review](references/ux-ui.md); obtain human approval of the design, then have reviewer assess UI code and rendered behavior independently.
 
 For explicitly requested prompt/workflow optimization, follow the isolated [improvement loop](references/improvement.md). Never apply candidates to live agents automatically; judge rankings guide evaluation effort and cannot replace mandatory verification or human approval.
+
+At approved architecture and verified project milestones, have Company Brain prepare [reviewable knowledge updates](references/knowledge-updates.md) from durable artifacts. Obtain independent review and exact human approval before invoking publication and vector reindexing. Never promote task discussion or unapproved assumptions automatically.
+
+For existing or undocumented systems, use the high-tier [Reverse Engineer](references/reverse-engineering.md) alongside Code Mapper before proposing changes. Independently review reconstructed behavior and baseline architecture; preserve human approval for new scope and Company Brain publication.

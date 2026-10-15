@@ -1,0 +1,12 @@
+{
+  "title": "Example integer service contract",
+  "requirements": [
+    {
+      "id": "R1",
+      "acceptance": [
+        "The public value function returns the integer 1.",
+        "The function has no filesystem or network side effects."
+      ]
+    }
+  ]
+}

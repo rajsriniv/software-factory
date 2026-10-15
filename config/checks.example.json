@@ -1,0 +1,12 @@
+{
+  "build": ["python3", "tools/factory_checks.py", "build"],
+  "unit": ["python3", "tools/factory_checks.py", "unit"],
+  "integration": ["python3", "tools/factory_checks.py", "integration"],
+  "dependencies": ["python3", "tools/factory_checks.py", "dependencies"],
+  "iac": ["python3", "tools/factory_checks.py", "iac"],
+  "provenance": ["python3", "tools/factory_checks.py", "provenance"],
+  "rollback": ["python3", "tools/factory_checks.py", "rollback"],
+  "network-security": ["python3", "tools/factory_checks.py", "network-security"],
+  "observability": ["python3", "tools/factory_checks.py", "observability"],
+  "e2e": ["python3", "-m", "pytest", "tests/e2e", "--junitxml={junit}"]
+}

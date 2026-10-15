@@ -25,9 +25,9 @@ flowchart TD
     H -- Approved --> I["Release and platform specialists"]
 ```
 
-This diagram describes the governed workflow. Refined-brief and design approvals
-are agent workflow requirements; they are not separate states enforced by the
-current Python controller.
+The version-two workflow controller enforces refined-brief, architecture and plan
+approvals, plus UI approval when frontend work is enabled. Local verification
+stops before deployment; isolated deployment requires configured trusted adapters.
 
 Agent communication is stored as structured, append-only events with a hash chain. Each handoff carries requirement IDs, artifact hashes, assumptions, scope, acceptance criteria, and evidence. A controller derives lifecycle state; agents cannot declare global success.
 
@@ -45,7 +45,7 @@ Agent communication is stored as structured, append-only events with a hash chai
 | Release | Release manager | High | Explicitly approved immutable artifact |
 | Optional improvement | Improvement proposer, evaluation judge | High | Inert overlays and independent comparison evidence |
 
-The installer and example configuration define 24 roles. The architecture council
+The installer and example configuration define 26 roles. The architecture council
 has five members: architect, security architect, security, quality and reviewer.
 Implementation and release councils each have three members.
 
@@ -172,3 +172,92 @@ with `.venv/bin/python -m pip install -e '.[brain]'`. Legacy queries remain lexi
 See [Company Brain migration and limits](skills/software-factory/references/company-brain.md).
 This is exact filtered search, with chunk citations and stale-index rejection;
 learned-model quality and workload speedups require real corpus evaluation.
+
+### Human-approved project knowledge updates
+
+Project milestones now produce reviewable Company Brain proposals. Independent
+review and interactive human approval precede publication. `brain-updates publish`
+imports the exact approved document and rebuilds vector retrieval; indexing failure
+is retryable without duplicate import. Inspect proposed/previous content and read
+the dedicated event stream with `brain-updates inspect` and `brain-updates events`.
+See the [knowledge handoff workflow](skills/software-factory/references/knowledge-updates.md).
+Host agents invoke this workflow; no background scanner is added, and local caller
+identity/approval permissions must be enforced by the host.
+
+
+### Reverse Engineer
+
+The high-tier `factory-reverse-engineer` reconstructs existing system behavior,
+contracts and TOGAF-aligned baseline architecture from cited code and runtime
+evidence. It collaborates with Code Mapper and hands independently reviewed
+findings to architect, planner, SDET and Company Brain. Discovery uses
+`factory-discovery`; see the [reverse-engineering workflow](skills/software-factory/references/reverse-engineering.md).
+The installer now generates 26 agents. Discovery does not authorize target-system
+modification, cloud mutation or knowledge publication.
+
+### Enforced execution and handoffs
+
+Run new initiatives through `software-factory workflow`, using an operator-reviewed
+manifest derived from `config/workflow.example.json`. See
+[the controller contract](skills/software-factory/references/enforced-workflow.md)
+for setup, commands, evidence schemas and isolation requirements. Reinstalling
+agent prompts alone does not activate orchestration: configure the project's
+actual worker/test/deployment commands and run the controller.
+
+The controller serializes and persists every handoff, executes checks, blocks
+missing approvals, protects tests between red and green, verifies independent
+reviewer assignments, detects stale source/evidence, and binds deployment to the
+approved artifact. It provides a readable `factory-handoffs` event stream.
+Legacy `FactoryState` objects remain planning simulations and cannot authorize
+execution through this controller. Use an isolated controller principal and
+restricted worker adapters; the skill installer does not provision those host or
+AWS permissions. Semantic correctness and authentic identities still depend on
+reviewers and trusted runtime adapters.
+
+### Version 0.2: spec-driven workflows
+
+New work uses workflow schema version 2. Start with a specification containing
+requirement IDs and observable acceptance criteria, then let the planner generate
+a task graph after architecture approval. Human plan approval precedes real TDD.
+Every acceptance criterion must reference passing JUnit evidence. A council cannot
+vote through disqualifiers or decide without complete independent assessments.
+
+```bash
+python3 -m pip install -e '.[brain]'
+python3 scripts/init_spec_workflow.py \
+  --repository /path/to/project \
+  --spec /path/to/project/spec.json \
+  --checks /path/to/project/checks.json \
+  --host claude --high-model YOUR_HIGH_MODEL_ID --low-model YOUR_LOW_MODEL_ID \
+  --output /path/to/controller/workflow.json
+software-factory workflow doctor \
+  --database /path/to/controller/run.db \
+  --manifest /path/to/controller/workflow.json \
+  --repository /path/to/project
+```
+
+Choose `--host codex` or `--host copilot` for the other clients. Use
+`--task-templates` for reviewed Java/React templates, `--frontend` for UI gates,
+and `--existing-system` for discovery. The default template is Python. Provide
+actual gate adapters using `config/checks.example.json` as a shape reference;
+placeholder adapters fail the doctor check. Add `.factory-state/` and test/build
+caches to the project's ignore file before execution.
+
+Then run `workflow next` with the same paths; use `workflow approve` at human
+gates. Read [the spec workflow](skills/software-factory/references/spec-driven-development.md)
+and [runtime/evidence contracts](skills/software-factory/references/enforced-workflow.md).
+Re-run the client installer with `--replace` after reviewing local customizations
+to refresh the skill and its 26 agents. Installing prompts alone does not start
+the controller or provision runtime security.
+
+Old run databases are not migrated into new approvals. Retain them as history,
+create a new version-two manifest/database, and obtain new approvals. Task repair
+can preserve valid earlier work within one run; arbitrary spec/architecture
+changes deliberately require fresh approvals.
+
+Local mode supports development and verification, not production deployment.
+Production requires a provisioned privileged controller, separate worker
+principals, trusted signed telemetry/ballots, protected approval keys, immutable
+adapters/artifacts and independent deployment observation. The stock native CLI
+adapter does not supply a trusted telemetry broker. Live Claude/Codex/Copilot and
+AWS integration must be validated in the operator's environment before release.

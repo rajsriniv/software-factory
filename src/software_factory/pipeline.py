@@ -26,6 +26,11 @@ TRANSITIONS: dict[Stage, set[Stage]] = {
 
 @dataclass
 class FactoryState:
+    """Legacy planning simulation, not execution or release authorization.
+
+    Use workflow.Workflow for enforced handoffs and actual command evidence.
+    """
+
     initiative_id: str
     stage: Stage = Stage.INTAKE
     approved_architecture_hash: str | None = None

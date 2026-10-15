@@ -1,8 +1,8 @@
 # Local factory operations
 
 Run commands from the repository root after installing the Python package as shown
-in the [README](../../README.md). The CLI records and retrieves local data; it does
-not run the entire agent workflow automatically.
+in the [README](../../README.md). Use the version-two workflow setup in the README to execute governed stages.
+Agent installation alone does not configure or start the controller.
 
 ## Configuration and role definitions
 
@@ -13,7 +13,7 @@ software-factory --help
 
 Replace `high-model-id` and `low-model-id` with explicit models available in your
 host. Validation accepts nonempty placeholder labels; it does not check model
-availability. The installer defines 24 roles, with Java, Python, React and Rust assigned
+availability. The installer defines 26 roles, with Java, Python, React and Rust assigned
 the lower tier and the remaining roles assigned the higher tier. Its `--host`,
 `--high-model`, `--low-model` and `--destination` arguments are required:
 

@@ -1,6 +1,6 @@
 # Governed Software Factory
 
-[![CI](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml)
+[![CI](https://github.com/rajsriniv/software-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/rajsriniv/software-factory/actions/workflows/ci.yml)
 
 A production-oriented reference implementation for treating the SDLC as an assembly line of specialized agents. It coordinates architecture, planning, Java/Python/Rust/React implementation, Rust GTK4/Iced desktop apps, E2E verification, security review, and AWS release preparation while preserving human control of architecture and production deployment.
 
@@ -13,10 +13,10 @@ flowchart TD
     K["Company Brain cited context"] --> A["Product intake and prompt refinement"]
     A --> R{"Human approves refined brief?"}
     R -- Revise --> A
-    R -- Approved --> B["Architecture and security design council"]
+    R -- Approved --> B["Architecture, security, challenge and applicable UI approval; council review"]
     B --> C{"Human approves architecture?"}
     C -- Revise --> B
-    C -- Approved --> D["Planning and applicable UX/UI design approval"]
+    C -- Approved --> D["Planning and human plan approval"]
     D --> E["TDD-guided Java / Python / React / Rust implementation"]
     E --> F["SDET tests and independent quality / security / UI review"]
     F --> G{"All required gates pass?"}
@@ -109,8 +109,10 @@ review and approval of its revision and artifact hash before architecture handof
 changes require renewed approval. See the
 [prompt refinement workflow](skills/software-factory/references/prompt-refiner.md).
 The existing installer generates this high-tier role for all three clients.
-This is an agent workflow and output contract; the CLI does not automatically
-invoke or validate its output. Existing architecture and release gates still apply.
+Version-two runs invoke the configured refinement adapter, validate hashed document
+evidence and stop at `intake-approval`. The refined-requirement JSON schema remains
+a separate output contract; the controller does not prove its semantic completeness.
+Architecture and release gates still apply.
 
 ### TDD and SDET
 
@@ -131,7 +133,8 @@ Default release prerequisites include network-security and observability evidenc
 The ledger supports `send --channel NAME` and `inbox --channel NAME` for human-readable
 agent discussions. See [specialist responsibilities and channels](skills/software-factory/references/platform-specialists.md).
 Infrastructure provisioning requires separately configured credentials, independent
-review and explicit human approval; agents are not installed or invoked automatically.
+review and explicit human approval. The installer generates definitions; running
+the configured controller invokes adapters for eligible stages.
 
 ### Security Architect
 
@@ -139,7 +142,9 @@ review and explicit human approval; agents are not installed or invoked automati
 boundaries, secure design options and requirement-to-control/test traceability.
 The separate security reviewer independently critiques their design before human
 architecture approval. See [secure architecture workflow](skills/software-factory/references/security-architecture.md).
-The example architecture council now has five members, including Security Architect.
+The example architecture council has five members, including Security Architect.
+The separate high-tier `factory-architecture-challenger` supplies an explicit
+architecture challenge before council review in version-two runs.
 
 ### UX, UI and frontend review
 

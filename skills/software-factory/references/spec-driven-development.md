@@ -46,8 +46,10 @@ nonignored source and hashes accepted evidence separately.
 The controller requires Company Brain context (or an explicit knowledge gap),
 refinement and human intake approval, alternatives, architecture, independent
 security design and challenge, a council decision, and human architecture approval.
-Existing systems add discovery. Frontend projects add UX, independent UI review
-and human UI approval. Record applicability explicitly in the manifest.
+Existing systems add discovery after company context and before refinement.
+Frontend projects add UX, independent UI review and human UI approval after
+architecture challenge and before council review/human architecture approval.
+Record applicability explicitly in the manifest.
 
 The planner produces tasks after architecture approval. Each task declares:
 

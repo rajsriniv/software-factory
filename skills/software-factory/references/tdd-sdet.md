@@ -1,6 +1,6 @@
 # TDD and SDET
 
-Use high-tier `factory-tdd-guide` and `factory-sdet` agents on all three hosts. Keep bounded implementation on the existing lower-tier Java/Python/React/Rust agents. Only start from a human-approved refined brief and approved architecture.
+Use high-tier `factory-tdd-guide` and `factory-sdet` agents on all three hosts. Keep bounded implementation on the existing lower-tier Java/Python/React/Rust agents. Only start from a human-approved refined brief, approved architecture and approved task plan.
 
 ## Assembly line
 
@@ -23,6 +23,6 @@ Do not run destructive or charge-generating AWS operations without existing task
 
 Use ledger message kinds `test-plan`, `tdd-evidence`, `e2e-suite` and `e2e-results`, correlated with the task ID. Attach requirement IDs, test/scenario IDs, test code and application revisions, environment, executed commands, reports and unresolved gaps.
 
-The controller's default release prerequisites now include `tdd` and `e2e-coverage` alongside `unit`, `integration` and `e2e`. Record `tdd` only after independently reviewed RED/GREEN/refactor evidence (or reviewed applicability rationale). Record `e2e-coverage` only after quality review confirms every requirement has a scenario or an approved alternative and no blocking gaps. Record `e2e` only after applicable tests actually run and pass. Never count skipped or quarantined blocking scenarios as passing.
+The legacy `FactoryState` simulation's default release prerequisites include `tdd` and `e2e-coverage` alongside `unit`, `integration` and `e2e`. Record `tdd` only after independently reviewed RED/GREEN/refactor evidence (or reviewed applicability rationale). Record `e2e-coverage` only after quality review confirms every requirement has a scenario or an approved alternative and no blocking gaps. Record `e2e` only after applicable tests actually run and pass. Never count skipped or quarantined blocking scenarios as passing.
 
-These stages are agent workflow steps within planning, implementation and verification, not new controller enum stages. The controller checks reported gate results; it does not automatically execute tests, authenticate their authors or independently validate logs. Use the host/CI to produce trustworthy evidence. Existing states with custom `required_gates` need to include the new gates explicitly.
+Version-two execution has explicit test-design, task test-writing/red/implementation/green/review, E2E and verification steps. `test_receipt` and `acceptance_runner` execute configured commands and validate fresh JUnit; every acceptance criterion must map to passing test IDs. A prose applicability rationale cannot replace that executable coverage contract. The documentation-only applicability guidance above applies to human workflow review, not a bypass of version-two evidence validation. Host/CI isolation and independent review still establish execution trust and semantic test quality. Legacy states with custom `required_gates` must include their required gates explicitly. See the [runtime contract](enforced-workflow.md).

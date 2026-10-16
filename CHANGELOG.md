@@ -6,6 +6,12 @@ All notable changes follow Keep a Changelog. This project uses Semantic Versioni
 
 ### Added
 
+- Version-two spec-driven controller with criterion-level JUnit coverage, human intake/architecture/plan and applicable UI approvals, operator-owned task templates, and bounded repair.
+- Workflow initializer and `workflow doctor`, execution, status, audit and interactive approval commands.
+- Architecture Challenger and Reverse Engineer roles, with explicit challenge and optional existing-system discovery stages.
+- Optional local vector/hybrid Company Brain retrieval, indexing and stale-index rejection.
+- Reviewable project knowledge proposals with independent review, interactive human approval, publication and retryable reindexing.
+- Isolated execution contracts for signed runtime/council receipts, artifact-bound deployment and independent deployment observation; trusted infrastructure remains operator-provisioned.
 - Persistent Company Brain with revisioned sources, expiry, role filtering and cited lexical retrieval.
 - Prompt Refiner workflow and refined-requirement schema with exact human approval before architecture.
 - TDD guide and SDET roles; default `tdd` and `e2e-coverage` verification gates.
@@ -19,8 +25,10 @@ All notable changes follow Keep a Changelog. This project uses Semantic Versioni
 
 ### Changed
 
-- Installer and example configuration now include 24 roles; Java, Python, React and Rust are the four lower-tier implementation roles.
-- Architecture, governance and contributor documentation now distinguish implemented checks from host-enforced workflow requirements.
+- Installer and example configuration now include 26 roles; Java, Python, React and Rust are the four lower-tier implementation roles.
+- Architecture, governance and contributor documentation distinguish version-two execution checks, legacy simulation and host-enforced security boundaries.
+- Package metadata declares version 0.2.0; `software_factory.__version__` still reports 0.1.0 and must not be used to identify the installed distribution. No 0.2.0 release date is asserted here.
+- Documentation synchronized with the controller, role inventory, command surface and repository CI badge.
 
 ## [0.1.0] - 2026-09-17
 

@@ -75,6 +75,7 @@ are logical ledger filters visible to humans with access, not private chat rooms
 After independent review, send durable findings to Company Brain as a proposal using
 `brain-updates propose`. Unknowns, unapproved assumptions and raw conversations do
 not enter company knowledge. Human approval and publication/reindexing remain
-mandatory. This adds an agent definition and workflow, not an automatic scanner or
-new controller stage. Host permissions must enforce read-only tool scope; installer
+mandatory. Version-two manifests with `existing_system: true` add a hashed-document
+`discovery` stage after company context and before refinement. Discovery uses the
+configured adapter; no background repository scanner is installed. Host permissions must enforce read-only tool scope; installer
 model fields and configuration tool labels alone do not enforce access restrictions.

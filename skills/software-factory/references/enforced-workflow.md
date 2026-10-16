@@ -6,8 +6,8 @@ compatibility path, not production authorization.
 
 ## Controller commands
 
-All commands take `--database /trusted/run.db --manifest /trusted/workflow.json
---repository /work/project`.
+All commands take `--database /trusted/run.db`,
+`--manifest /trusted/workflow.json` and `--repository /work/project`.
 
 - `workflow doctor`: validate spec/state and detect missing executables/adapters.
 - `workflow status`: current eligible phase, assurance, delivery mode and usage.
@@ -69,6 +69,12 @@ and write a fresh report to `FACTORY_GATE_REPORT`:
 ```json
 {"input_sha256":"CURRENT_INPUT_HASH","checks":[{"id":"actual-check-name","passed":true}]}
 ```
+
+Final verification requires nine gate adapters: `build`, `unit`, `integration`,
+`dependencies`, `iac`, `provenance`, `rollback`, `network-security` and
+`observability`. TDD, criterion-level E2E coverage and security are separately
+enforced steps; the legacy `FactoryState` inventory of 13 booleans is not the
+execution contract.
 
 A successful exit without this report cannot pass. Adapters must derive checks
 from real tool results, never synthesize success or silently skip unavailable

@@ -34,11 +34,16 @@ Material architecture or requirement changes invalidate affected plans and appro
 - TDD guide and SDET may author tests; quality independently verifies requirement coverage and execution evidence.
 - Company Brain provides cited context. Knowledge imports require source-owner authorization; retrieval does not grant tools, votes or approval authority.
 
-The controller's default verification prerequisites are `build`, `unit`,
+The legacy `FactoryState` simulation's default verification prerequisites are `build`, `unit`,
 `integration`, `tdd`, `e2e-coverage`, `security`, `dependencies`, `e2e`, `iac`,
 `provenance`, `rollback`, `network-security` and `observability`. The example
 configuration's `immutable_gates` list is separate policy metadata; it does not
-replace `FactoryState.required_gates`.
+replace `FactoryState.required_gates`. Version-two execution separately requires
+actual red/green, E2E coverage, security and final verification evidence. Its final
+verification adapters execute `build`, `unit`, `integration`, `dependencies`, `iac`,
+`provenance`, `rollback`, `network-security` and `observability`; these are distinct
+from the legacy 13-record inventory. See the
+[controller contract](skills/software-factory/references/enforced-workflow.md).
 
 ## Optional improvement governance
 
@@ -52,9 +57,16 @@ See the [improvement workflow](skills/software-factory/references/improvement.md
 
 ## Enforcement responsibility
 
-Python checks validate supplied records, not human identity or evidence provenance.
-The host must authenticate approvals, verify actual test execution and resolved
-models, enforce separation of duties and refresh approvals after artifact changes.
-Prompt and design approval requirements are currently enforced by the workflow and
-host, rather than dedicated controller transitions. Local database ownership can
-bypass storage-level protections; deploy appropriate access controls and backups.
+Version-two runs execute configured commands, validate hashed evidence and JUnit
+coverage, and enforce dedicated intake, architecture, plan and applicable UI
+approval transitions. Deployment adds exact release approval and independent
+deployment verification. The CLI requires interactive human confirmation.
+
+Local mode trusts operator and actor identities and supports verification only.
+Isolated deployment requires privileged controller storage, distinct worker
+principals, protected approval/telemetry keys, pinned adapters and signed receipts.
+The stock native adapter supplies no trusted telemetry broker. The host must
+provision and protect these boundaries and authenticate the operator; a terminal
+prompt or JSON actor label alone does not establish identity. Local database
+ownership can bypass storage protections. Legacy `FactoryState`, Company Brain
+and improvement records retain their documented trusted-caller limitations.

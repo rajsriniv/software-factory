@@ -30,6 +30,9 @@ network, load balancer or API Gateway. Platform specialist role definitions do n
 provision those resources automatically.
 
 GitHub CI covers control-plane checks and static blueprint validation. The AWS
-workflow is not connected to `FactoryState` and does not consume its 13 gate
-records. Integrate independently verified release evidence and approval checks
-before treating it as a complete factory release pipeline.
+workflow is separate from both legacy `FactoryState` and the version-two
+controller. It consumes neither legacy gate records nor controller approvals,
+signed receipts or deployment-observation evidence. Integrate independently
+verified release evidence and approval checks before treating it as a complete
+factory release pipeline. Protect the Terraform plan and its checksum together;
+a checksum detects content changes but does not authenticate the plan author.
